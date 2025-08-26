@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Information Form</title>
+    <link rel="stylesheet" href="try.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="/Web_Technology_Project/Source/images.png" alt="Logo">
+        </div>
+        <div class="nav-links">
+            <a href="Home.html">Home</a>
+            <a href="About.html">About</a>
+            <a href="Academics.html">Academics</a>
+            <a href="Fact.html">Facilities</a>
+       
+        </div>
+    </nav>
+    <!-- Marquee -->  <a href="login.html">
+    <marquee behavior="scroll" direction="left">
+        Universal College, Kathmandu-30, Maitidevi &nbsp;&nbsp; Form Update &nbsp;&nbsp; New Admission Open </marquee>  </a>
+   
+    <form action="#">
+      <div class="Form">
+        <h3 style="color: rgb(255, 26, 1);margin-bottom: 30px; font-size: 30px;">Personal Information Form</h3>
+
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name"><br><br>
+
+       
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your E-mail"required><br><br>
+
+      
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" maxlength="10" placeholder="Enter your number"required><br><br>
+
+        
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required><br><br>
+
+        <label for="dob">GPA In +2 Program</label>
+        <input type="tel" id="no" maxlength="2" name="no" required><br><br>
+
+        <style>
+            #sub{
+background-color: green;                
+color: white;
+font-weight:bold;
+            }
+            #res{
+                background-color: red;                
+color: white;
+font-weight:bold;
+            }
+
+            .red{
+                display:flex;
+                gap: 20px;;
+            }
+        </style>
+   <div class="red">
+    <a href="Sucess.html">
+        <input type="submit" id="sub" value="Submit" >
+        </a>
+        <input type="reset" id="res" value="Reset">
+    </div>
+    </div>
+    </form>
+</body>
+</html>
