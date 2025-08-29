@@ -4,16 +4,12 @@
     box-sizing: border-box;
 }
 
-.logo img {
-    width: 75px; /* Adjust the size of the logo */
+/* .logo img {
+    width: 75px; Adjust the size of the logo
     height: auto;
     border-radius: 10px;
-}
-.logo {
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-}
+} */
+
 nav {
     background-color: #0084ff;
     padding: 10px 10px;
@@ -153,3 +149,38 @@ h6{
     color: white;
     
 }
+
+logo {
+  display: flex;
+  align-items: center;      /* vertically center */
+  gap: 10px;                /* space between image and text */
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;    /* remove underline */
+}
+
+/* Logo image */
+.logo img {
+  width: 50px;              /* logo width */
+  height: 50px;             /* logo height */
+  object-fit: cover;
+  border-radius: 10px;      /* optional rounded corners */
+}
+
+
+ .Body-Container {
+            background-image: url('new2.jpg'); /* Image path */
+            background-size: cover; 
+            background-position: center; 
+            height: 60vh;
+            margin:5px;
+            border-radius:10px;
+            
+            } 
+            .Body-all{
+                background-color:blue;
+                border-radius:10px;
+                margin:5px;
+            }
