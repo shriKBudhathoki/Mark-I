@@ -114,7 +114,9 @@ h5{
 }
 .Body-all{
     background-color:blue;
+   
 }
+
 
 h6{
     color:yellowgreen;
@@ -179,8 +181,4 @@ logo {
             border-radius:10px;
             
             } 
-            .Body-all{
-                background-color:blue;
-                border-radius:10px;
-                margin:5px;
-            }
+   
