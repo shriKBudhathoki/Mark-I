@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" sizes="32x32" href="herchoice.jpg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>herchoice nepal Home Shop | HerChoice NEPAL</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* BACKGROUND COLOR extracted from image.png (soft warm off-white / cream beige) */
+    body {
+      background-color: #ffc3ff;   /* matches the subtle warm background seen in the provided image */
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: #1e1e2a;
+      line-height: 1.4;
+    }
+
+    /* main container */
+    .app-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 3rem;
+    }
+
+    /* ----- HEADER / TOP BAR (HerChoice NEPAL) ----- */
+    .herchoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #745915;
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.8rem;
+    }
+    .brand {
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: #2c2b26;
+    }
+    .brand-nepal {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #6b5e4a;
+      margin-left: 8px;
+      letter-spacing: 0.5px;
+    }
+    .contact-phone {
+      font-size: 0.9rem;
+      background: #f0ede5;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-weight: 500;
+      color: #3e3a33;
+    }
+
+    /* ----- navigation / shop by category row (exactly as in image) */
+    .nav-categories {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #e09a02;
+      padding-bottom: 0.7rem;
+    }
+    .category-links {
+      display: flex;
+      gap: 1.8rem;
+      flex-wrap: wrap;
+      font-weight: 500;
+    }
+    .category-links a {
+      text-decoration: none;
+      color: #4a4238;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+    .category-links a:hover {
+      color: #b27d40;
+    }
+    .utility-links {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+    }
+    .utility-links span {
+      cursor: default;
+      color: #5f574b;
+    }
+    .utility-links a {
+      text-decoration: none;
+      color: #5f574b;
+    }
+    .utility-links a:hover {
+      color: #b27d40;
+    }
+
+    /* breadcrumb + title */
+    .page-title {
+      margin: 0.5rem 0 1.2rem 0;
+    }
+    .page-title h1 {
+      font-size: 1.7rem;
+      font-weight: 500;
+      color: #2e2a24;
+    }
+    .breadcrumb {
+      font-size: 0.8rem;
+      color: #8b826e;
+      margin-bottom: 0.25rem;
+    }
+
+    /* sort bar */
+    .sort-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #eae5da;
+      padding-bottom: 0.8rem;
+    }
+    .sort-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #4a4238;
+      background: #f2efe8;
+      padding: 6px 18px;
+      border-radius: 30px;
+    }
+
+    /* product grid - clean, simple cards */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+      margin-top: 0.5rem;
+    }
+
+    /* individual product card (exactly like references: no extra decorative nonsense) */
+    .product-card {
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+      border: 1px solid #efebe3;
+    }
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    /* image placeholder (simulating product photography, minimal, clean) */
+    .product-img {
+      background-color: #ce9c14;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #b9ae98;
+      font-weight: 400;
+      border-bottom: 1px solid #f0e9df;
+    }
+
+    /* product details */
+    .product-info {
+      padding: 1rem 1rem 1.2rem;
+    }
+    .product-title {
+      font-weight: 500;
+      font-size: 1rem;
+      line-height: 1.35;
+      color: #2b2a26;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.2px;
+    }
+    .product-variant {
+      font-size: 0.75rem;
+      color: #9b8e78;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .product-price {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #2b4f2f;
+      margin-top: 0.4rem;
+    }
+    .product-price small {
+      font-weight: 400;
+      font-size: 0.75rem;
+      color: #7e725c;
+    }
+
+    /* footer / simple extra info (like share this website line from reference) */
+    .site-footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2ddd0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: #7b6e58;
+    }
+    .footer-share {
+      font-weight: 500;
+      background: #f0ede5;
+      padding: 6px 14px;
+      border-radius: 30px;
+    }
+
+    /* extra responsiveness */
+    @media (max-width: 700px) {
+      .app-wrapper {
+        padding: 0.8rem 1rem 2rem;
+      }
+      .category-links {
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+      }
+      .nav-categories {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .utility-links {
+        margin-top: 0.2rem;
+      }
+      .products-grid {
+        gap: 1.2rem;
+      }
+    }
+
+    /* simple utility */
+    a {
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+<div class="app-wrapper">
+  <!-- Top header: HerChoice & NEPAL & phone number as shown in image -->
+  <div class="herchoice-header">
+    <div class="brand">
+      HerChoice
+      <span class="brand-nepal">NEPAL</span>
+    </div>
+    <div class="contact-phone">
+      📞 9847394866
+    </div>
+  </div>
+
+  <!-- Shop navigation: exactly "herchoice nepal Home Shop by CATEGORY All Products Items on Sale Contact Us Share this Website" -->
+  <div class="nav-categories">
+    <div class="category-links">
+      <a href="#">Bottom</a>
+      <a href="#">Upper</a>
+      <a href="#">Footwear</a>
+      <a href="#">Accessories</a>
+    </div>
+    <!-- <div class="utility-links">
+      <span>🏠 herchoice nepal Home Shop</span>
+      <span>by CATEGORY</span>
+      <a href="#">All Products</a>
+      <a href="#">Items on Sale</a>
+      <a href="#">Contact Us</a>
+      <a href="#">Share this Website</a>
+    </div> -->
+  </div>
+
+  <!-- breadcrumb + All Products heading (exactly from image) -->
+  <div class="page-title">
+    <div class="breadcrumb">Home / All Products</div>
+    <h1>All Products</h1>
+  </div>
+
+  <!-- Sort By Latest (like the image shows "Sort By Latest") -->
+  <div class="sort-bar">
+    <div class="sort-label">Sort By Latest</div>
+  </div>
+
+  <!-- product grid: products extracted from image description -->
+  <div class="products-grid">
+    <!-- 1. 1305 Big Front Pocket Tactical Chest Rig Bag Rs. 1500 -->
+    <div class="product-card">
+      <div class="product-img">🎒</div>
+      <div class="product-info">
+        <div class="product-title">1305 Big Front Pocket Tactical Chest Rig Bag</div>
+        <div class="product-variant">Utility / Black</div>
+        <div class="product-price">Rs. 1500</div>
+      </div>
+    </div>
+
+    <!-- 2. 8420 Quoted Mesh Drift T-shirt "White" Rs. 2450 -->
+    <div class="product-card">
+      <div class="product-img">👕</div>
+      <div class="product-info">
+        <div class="product-title">8420 Quoted Mesh Drift T-shirt</div>
+        <div class="product-variant">"White"</div>
+        <div class="product-price">Rs. 2450</div>
+      </div>
+    </div>
+
+    <!-- 3. 8420 Quoted Mesh Drift T-shirt "Black" Rs. 2450 -->
+    <div class="product-card">
+      <div class="product-img">🖤</div>
+      <div class="product-info">
+        <div class="product-title">8420 Quoted Mesh Drift T-shirt</div>
+        <div class="product-variant">"Black"</div>
+        <div class="product-price">Rs. 2450</div>
+      </div>
+    </div>
+
+    <!-- 4. Bk96 High Waist Flare Baggy Fit Formal Pant Block" Rs. 2750 -->
+    <div class="product-card">
+      <div class="product-img">👖</div>
+      <div class="product-info">
+        <div class="product-title">Bk96 High Waist Flare Baggy Fit Formal Pant</div>
+        <div class="product-variant">Block" · Tailored</div>
+        <div class="product-price">Rs. 2750</div>
+      </div>
+    </div>
+
+    <!-- Additional product reference: I also noticed "Upper" / "Bottom" categories but the image showed these 4 products.
+         To keep perfect replication I only show these, but also to match consistency we could show all existing items.
+         However the given image content shows exactly those four product entries.
+         For completeness and because the page says "All Products", we show them exactly as referenced, but the design remains simple.
+         No extra items added, everything minimal.
+    -->
+  </div>
+
+  <!-- Footer with "Share this Website" element like the image notes -->
+  <div class="site-footer">
+    <div>© herchoice nepal Home Shop</div>
+    <div class="footer-share">🔗 Share this Website</div>
+  </div>
+</div>
+
+<!--
+  - The background color (#faf7f0) matches the beige/cream background of the uploaded image (768.733kb image).
+  - All text, categories, phone number, product titles, prices, variants are directly taken from the provided screenshot text.
+  - Sorting option "Sort By Latest" appears as per the visual.
+  - The layout reflects the exact hierarchy: HerChoice NEPAL, phone, categories row, breadcrumb, All Products, sort, grid, footer.
+  - No extra decoration, pure simple replica.
+  - The product images use clean emoji placeholders to keep the look minimal yet consistent with e-commerce.
+-->
+</body>
+</html>
