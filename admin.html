@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURUM — Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#B8964E;--gold-light:#D4AF72;--gold-pale:#F5EDD8;
+  --ink:#1A1612;--ink-mid:#3D3530;--ink-soft:#7A6F68;
+  --cream:#FAF8F3;--white:#FFFFFF;
+  --bg:#F4F2ED;--sidebar:#1A1612;
+  --border:rgba(26,22,18,0.1);--border-gold:rgba(184,150,78,0.25);
+  --red:#C0392B;--green:#1A7A4A;--blue:#1A4A7A;
+  --shadow:0 4px 24px rgba(26,22,18,0.1);
+}
+html,body{height:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+
+/* ─── LOGIN SCREEN ───────────────────────────────── */
+#login-screen{
+  position:fixed;inset:0;z-index:1000;
+  background:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+}
+.login-card{
+  width:440px;background:var(--cream);padding:56px 48px;
+  position:relative;overflow:hidden;
+}
+.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light),var(--gold))}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;letter-spacing:0.14em;color:var(--ink);margin-bottom:6px}
+.login-logo span{color:var(--gold)}
+.login-sub{font-size:12px;color:var(--ink-soft);letter-spacing:0.05em;margin-bottom:40px}
+.form-group{margin-bottom:20px}
+.form-group label{display:block;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;font-weight:500}
+.form-group input{
+  width:100%;padding:12px 16px;
+  border:1px solid var(--border);background:white;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);
+  outline:none;transition:border-color .2s;
+}
+.form-group input:focus{border-color:var(--gold)}
+.login-btn{
+  width:100%;padding:14px;background:var(--ink);color:white;
+  border:none;cursor:pointer;font-family:'DM Sans',sans-serif;
+  font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;
+  margin-top:8px;transition:background .2s;
+}
+.login-btn:hover{background:var(--gold)}
+.login-error{color:var(--red);font-size:12px;margin-top:10px;display:none}
+.login-hint{font-size:11px;color:var(--ink-soft);margin-top:16px;text-align:center}
+.login-hint span{color:var(--gold);font-family:'Cormorant Garamond',serif;font-style:italic}
+
+/* ─── ADMIN LAYOUT ───────────────────────────────── */
+#admin-app{display:none;height:100vh;overflow:hidden}
+#admin-app.visible{display:flex}
+
+/* Sidebar */
+.sidebar{
+  width:240px;flex-shrink:0;background:var(--sidebar);
+  display:flex;flex-direction:column;overflow-y:auto;
+}
+.sidebar-logo{
+  padding:28px 24px 24px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.sidebar-logo a{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;letter-spacing:0.14em;color:white;text-decoration:none}
+.sidebar-logo a span{color:var(--gold)}
+.sidebar-logo p{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:4px}
+.nav-group{padding:20px 0}
+.nav-group-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:0 20px;margin-bottom:6px;font-weight:500}
+.nav-item{display:flex;align-items:center;gap:10px;padding:11px 20px;cursor:pointer;transition:background .15s;color:rgba(255,255,255,0.5);font-size:13px;letter-spacing:0.02em;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif}
+.nav-item svg{flex-shrink:0;opacity:.6}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.8)}
+.nav-item:hover svg{opacity:.9}
+.nav-item.active{background:rgba(184,150,78,0.12);color:var(--gold-light)}
+.nav-item.active svg{opacity:1;color:var(--gold)}
+.sidebar-bottom{margin-top:auto;padding:20px 16px;border-top:1px solid rgba(255,255,255,0.06)}
+.logout-btn{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;color:rgba(255,255,255,0.35);font-size:13px;background:none;border:none;width:100%;font-family:'DM Sans',sans-serif;transition:color .2s}
+.logout-btn:hover{color:rgba(255,255,255,0.7)}
+
+/* Main area */
+.main-area{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.topbar{
+  background:var(--white);border-bottom:1px solid var(--border);
+  padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;position:sticky;top:0;z-index:50;
+}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--ink)}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.admin-badge{font-size:11px;letter-spacing:0.06em;color:var(--ink-soft);background:var(--bg);padding:6px 14px;border:1px solid var(--border)}
+.topbar-store-link{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:6px;transition:opacity .2s}
+.topbar-store-link:hover{opacity:.7}
+
+/* Pages */
+.page{display:none;flex:1;padding:32px}
+.page.active{display:block}
+
+/* ─── DASHBOARD ──────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.stat-card{background:var(--white);border:1px solid var(--border);padding:22px 24px}
+.stat-card-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
+.stat-card-value{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--ink);line-height:1}
+.stat-card-change{font-size:12px;margin-top:6px}
+.stat-card-change.up{color:var(--green)}
+.stat-card-change.down{color:var(--red)}
+.recent-table{background:var(--white);border:1px solid var(--border)}
+.table-header{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.table-header h3{font-size:14px;font-weight:500;color:var(--ink)}
+table{width:100%;border-collapse:collapse}
+th{padding:12px 24px;text-align:left;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);border-bottom:1px solid var(--border);background:var(--bg);font-weight:500}
+td{padding:14px 24px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg)}
+.status-pill{display:inline-block;padding:3px 10px;font-size:10px;letter-spacing:0.06em;font-weight:500;border-radius:2px}
+.pill-active{background:rgba(26,122,74,.1);color:var(--green)}
+.pill-out{background:rgba(192,57,43,.1);color:var(--red)}
+.pill-ltd{background:rgba(184,150,78,.12);color:var(--gold)}
+
+/* ─── PRODUCTS ────────────────────────────────────── */
+.page-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap}
+.search-input-wrap{position:relative;flex:1;max-width:380px}
+.search-input-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%)}
+.search-input-wrap input{width:100%;padding:10px 12px 10px 38px;border:1px solid var(--border);background:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;transition:border-color .2s}
+.search-input-wrap input:focus{border-color:var(--gold)}
+.action-btn{display:flex;align-items:center;gap:8px;padding:10px 20px;background:var(--ink);color:white;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;font-weight:500;transition:background .2s;white-space:nowrap}
+.action-btn:hover{background:var(--gold)}
+.action-btn.secondary{background:white;color:var(--ink);border:1px solid var(--border)}
+.action-btn.secondary:hover{border-color:var(--gold);color:var(--gold);background:white}
+.action-btn.danger{background:var(--red)}
+.action-btn.danger:hover{background:#a93226}
+
+/* Product list table */
+.product-row{transition:background .15s}
+.product-row:hover td{background:rgba(184,150,78,0.04)}
+.prod-thumb{width:48px;height:60px;background:#F2EDE4;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;flex-shrink:0}
+.prod-thumb img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.prod-thumb-cell{display:flex;align-items:center;gap:14px}
+.prod-title{font-weight:500;font-size:13px;color:var(--ink)}
+.prod-subtitle{font-size:12px;color:var(--ink-soft);margin-top:2px}
+
+/* ─── MODAL / DRAWER ─────────────────────────────── */
+.drawer-overlay{position:fixed;inset:0;background:rgba(26,22,18,0.5);z-index:500;display:none}
+.drawer-overlay.open{display:block}
+.drawer{
+  position:fixed;top:0;right:-700px;bottom:0;width:660px;
+  background:var(--white);z-index:501;
+  transition:right .35s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+  box-shadow:-8px 0 40px rgba(0,0,0,0.15);
+}
+.drawer.open{right:0}
+.drawer-header{
+  padding:24px 32px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.drawer-header h2{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400}
+.drawer-close{background:none;border:1px solid var(--border);width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-soft);font-size:20px;transition:all .2s}
+.drawer-close:hover{border-color:var(--ink);color:var(--ink)}
+.drawer-body{flex:1;overflow-y:auto;padding:28px 32px}
+.drawer-footer{padding:20px 32px;border-top:1px solid var(--border);display:flex;gap:12px;flex-shrink:0}
+.drawer-footer .action-btn{flex:1;justify-content:center;padding:13px}
+
+/* Form Styles */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form-row.single{grid-template-columns:1fr}
+.field{margin-bottom:0}
+.field label{display:block;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px;font-weight:500}
+.field input,.field select,.field textarea{
+  width:100%;padding:10px 14px;border:1px solid var(--border);
+  background:white;font-family:'DM Sans',sans-serif;font-size:13px;
+  color:var(--ink);outline:none;transition:border-color .2s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold)}
+.field textarea{resize:vertical;min-height:90px;line-height:1.6}
+.field select{cursor:pointer;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A6F68' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+
+/* Image Upload */
+.img-upload-area{
+  border:2px dashed var(--border);padding:32px;text-align:center;
+  cursor:pointer;transition:border-color .2s,background .2s;position:relative;
+  background:var(--bg);
+}
+.img-upload-area:hover,.img-upload-area.dragover{border-color:var(--gold);background:var(--gold-pale)}
+.img-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{margin:0 auto 12px;opacity:.4;display:block}
+.upload-text{font-size:13px;color:var(--ink-soft);margin-bottom:4px}
+.upload-hint{font-size:11px;color:var(--ink-soft);opacity:.6}
+.img-preview{margin-top:16px;position:relative;display:none}
+.img-preview img{width:100%;max-height:280px;object-fit:contain;border:1px solid var(--border);background:var(--bg)}
+.img-preview-remove{position:absolute;top:8px;right:8px;background:var(--red);color:white;border:none;width:28px;height:28px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+
+/* Specs Builder */
+.specs-builder{border:1px solid var(--border)}
+.spec-row-input{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);align-items:center}
+.spec-row-input:last-child{border-bottom:none}
+.spec-row-input input{padding:7px 10px;border:1px solid var(--border);font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);outline:none}
+.spec-row-input input:focus{border-color:var(--gold)}
+.spec-remove-btn{background:none;border:none;cursor:pointer;color:var(--ink-soft);font-size:18px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;transition:color .2s}
+.spec-remove-btn:hover{color:var(--red)}
+.add-spec-btn{padding:9px 14px;border:1px dashed var(--border);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);width:100%;transition:all .2s;margin-top:8px}
+.add-spec-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* Confirm dialog */
+.confirm-dialog{position:fixed;inset:0;z-index:600;background:rgba(26,22,18,0.5);display:none;align-items:center;justify-content:center}
+.confirm-dialog.open{display:flex}
+.confirm-box{background:white;padding:36px;width:400px}
+.confirm-box h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:10px}
+.confirm-box p{font-size:13px;color:var(--ink-soft);margin-bottom:28px;line-height:1.6}
+.confirm-btns{display:flex;gap:12px}
+
+/* Toast */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--ink);color:white;padding:12px 24px;font-size:13px;letter-spacing:0.04em;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:800;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.t-icon{color:var(--gold)}
+
+/* Empty state */
+.empty-state{text-align:center;padding:80px 20px;color:var(--ink-soft)}
+.empty-state svg{margin-bottom:16px;opacity:.3}
+.empty-state h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--ink);margin-bottom:8px}
+.empty-state p{font-size:13px}
+
+/* Pagination */
+.pagination{display:flex;align-items:center;gap:8px;margin-top:20px;justify-content:flex-end}
+.page-btn{width:34px;height:34px;border:1px solid var(--border);background:white;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.page-btn:hover,.page-btn.active{background:var(--ink);color:white;border-color:var(--ink)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">AUR<span>U</span>M</div>
+    <div class="login-sub">Admin Portal — Secure Access</div>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="login-user" placeholder="admin" autocomplete="username"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In to Dashboard</button>
+    <div class="login-error" id="login-error">Incorrect credentials. Please try again.</div>
+    <div class="login-hint">Demo credentials: <span>admin</span> / <span>aurum2025</span></div>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="admin-app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <a href="index.html">AUR<span>U</span>M</a>
+      <p>Admin Dashboard</p>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Overview</div>
+      <button class="nav-item active" onclick="showPage('dashboard',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Catalogue</div>
+      <button class="nav-item" onclick="showPage('products',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Products
+        <span style="margin-left:auto;background:var(--gold);color:white;font-size:10px;padding:2px 7px;border-radius:2px" id="sidebar-prod-count">0</span>
+      </button>
+      <button class="nav-item" onclick="showPage('categories',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20h16M4 12h16M4 4h16"/></svg>
+        Categories
+      </button>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Commerce</div>
+      <button class="nav-item" onclick="showPage('orders',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="m16 8 2 2 4-4"/><path d="M1 10h15"/></svg>
+        Orders
+      </button>
+      <button class="nav-item" onclick="showPage('customers',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Customers
+      </button>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Settings</div>
+      <button class="nav-item" onclick="showPage('settings',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </button>
+    </div>
+
+    <div class="sidebar-bottom">
+      <button class="logout-btn" onclick="doLogout()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Log Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-area">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-right">
+        <div class="admin-badge" id="admin-user-badge">Administrator</div>
+        <a href="index.html" target="_blank" class="topbar-store-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          View Storefront
+        </a>
+      </div>
+    </div>
+
+    <!-- DASHBOARD PAGE -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-label">Total Products</div>
+          <div class="stat-card-value" id="dash-products">0</div>
+          <div class="stat-card-change up" id="dash-products-sub"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Active Listings</div>
+          <div class="stat-card-value" id="dash-active">0</div>
+          <div class="stat-card-change up">In stock</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">With Images</div>
+          <div class="stat-card-value" id="dash-images">0</div>
+          <div class="stat-card-change" id="dash-img-sub" style="color:var(--ink-soft)">Uploaded</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Categories</div>
+          <div class="stat-card-value" id="dash-cats">0</div>
+          <div class="stat-card-change" style="color:var(--ink-soft)">Distinct</div>
+        </div>
+      </div>
+
+      <div class="recent-table">
+        <div class="table-header">
+          <h3>Product Catalogue Overview</h3>
+          <button class="action-btn" onclick="showPage('products',document.querySelectorAll('.nav-item')[1])" style="font-size:11px;padding:8px 16px">Manage Products</button>
+        </div>
+        <table>
+          <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Rating</th><th>Status</th></tr></thead>
+          <tbody id="dash-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PRODUCTS PAGE -->
+    <div class="page" id="page-products">
+      <div class="page-toolbar">
+        <div class="search-input-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A6F68" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" placeholder="Search products…" oninput="filterAdminProducts(this.value)"/>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <select style="padding:9px 14px;border:1px solid var(--border);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;background:white;outline:none" onchange="filterAdminByCat(this.value)" id="cat-filter">
+            <option value="">All Categories</option>
+            <option>Fragrance</option><option>Timepieces</option><option>Leather Goods</option>
+            <option>Jewellery</option><option>Accessories</option>
+          </select>
+          <button class="action-btn" onclick="openDrawer()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Product
+          </button>
+        </div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border)">
+        <table>
+          <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Badge</th><th>Image</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="admin-products-tbody"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- CATEGORIES PAGE -->
+    <div class="page" id="page-categories">
+      <div style="background:var(--white);border:1px solid var(--border)">
+        <div class="table-header">
+          <h3>Product Categories</h3>
+        </div>
+        <table>
+          <thead><tr><th>Category</th><th>Products</th><th>In Stock</th></tr></thead>
+          <tbody id="cats-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ORDERS PAGE (demo) -->
+    <div class="page" id="page-orders">
+      <div style="background:var(--white);border:1px solid var(--border)">
+        <div class="table-header"><h3>Recent Orders</h3><span style="font-size:12px;color:var(--ink-soft)">Demo data</span></div>
+        <table>
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>#AU-4521</td><td>Sophia Rajan</td><td>2</td><td>$2,125</td><td>2 Jan 2025</td><td><span class="status-pill pill-active">Shipped</span></td></tr>
+            <tr><td>#AU-4520</td><td>Marcus Klein</td><td>1</td><td>$4,720</td><td>1 Jan 2025</td><td><span class="status-pill pill-active">Delivered</span></td></tr>
+            <tr><td>#AU-4519</td><td>Antoine Lefèvre</td><td>3</td><td>$3,845</td><td>31 Dec 2024</td><td><span class="status-pill pill-ltd">Processing</span></td></tr>
+            <tr><td>#AU-4518</td><td>Yuki Tanaka</td><td>1</td><td>$340</td><td>30 Dec 2024</td><td><span class="status-pill pill-active">Delivered</span></td></tr>
+            <tr><td>#AU-4517</td><td>Priya Mehta</td><td>2</td><td>$5,005</td><td>29 Dec 2024</td><td><span class="status-pill pill-out">Cancelled</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS PAGE (demo) -->
+    <div class="page" id="page-customers">
+      <div style="background:var(--white);border:1px solid var(--border)">
+        <div class="table-header"><h3>Customer Accounts</h3><span style="font-size:12px;color:var(--ink-soft)">Demo data</span></div>
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Location</th><th>Orders</th><th>Total Spent</th></tr></thead>
+          <tbody>
+            <tr><td>Sophia Rajan</td><td>sophia.r@example.com</td><td>Dubai, UAE</td><td>7</td><td>$14,280</td></tr>
+            <tr><td>Marcus Klein</td><td>m.klein@example.com</td><td>Geneva, CH</td><td>12</td><td>$28,750</td></tr>
+            <tr><td>Antoine Lefèvre</td><td>al@example.com</td><td>Paris, FR</td><td>4</td><td>$9,320</td></tr>
+            <tr><td>Yuki Tanaka</td><td>y.tanaka@example.com</td><td>Tokyo, JP</td><td>3</td><td>$4,210</td></tr>
+            <tr><td>Priya Mehta</td><td>priya.m@example.com</td><td>Mumbai, IN</td><td>5</td><td>$11,060</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SETTINGS PAGE -->
+    <div class="page" id="page-settings">
+      <div style="background:var(--white);border:1px solid var(--border);max-width:600px">
+        <div class="table-header"><h3>Account Settings</h3></div>
+        <div style="padding:28px 24px">
+          <div class="form-row">
+            <div class="field"><label>Username</label><input type="text" id="set-user" value="admin"/></div>
+            <div class="field"><label>Display Name</label><input type="text" value="Administrator"/></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label>New Password</label><input type="password" id="set-pass" placeholder="Leave blank to keep current"/></div>
+            <div class="field"><label>Confirm Password</label><input type="password" id="set-pass2" placeholder="Confirm new password"/></div>
+          </div>
+          <div class="form-row single">
+            <div class="field"><label>Store Name</label><input type="text" value="AURUM Luxury"/></div>
+          </div>
+          <button class="action-btn" onclick="saveSettings()" style="margin-top:8px">Save Settings</button>
+        </div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);max-width:600px;margin-top:20px">
+        <div class="table-header"><h3>Data Management</h3></div>
+        <div style="padding:28px 24px;display:flex;gap:12px;flex-wrap:wrap">
+          <button class="action-btn secondary" onclick="exportData()">Export Products (JSON)</button>
+          <button class="action-btn secondary" onclick="document.getElementById('import-input').click()">Import Products (JSON)</button>
+          <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(this)"/>
+          <button class="action-btn danger" onclick="confirmResetData()">Reset to Defaults</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div><!-- /admin-app -->
+
+<!-- PRODUCT DRAWER -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="product-drawer">
+  <div class="drawer-header">
+    <h2 id="drawer-title">Add New Product</h2>
+    <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+  </div>
+  <div class="drawer-body">
+    <input type="hidden" id="edit-product-id"/>
+
+    <!-- Image Upload -->
+    <div style="margin-bottom:24px">
+      <div class="field" style="margin-bottom:8px"><label>Product Image</label></div>
+      <div class="img-upload-area" id="upload-area" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+        <input type="file" id="image-input" accept="image/*" onchange="handleImageSelect(this)"/>
+        <svg class="upload-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#B8964E" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <div class="upload-text">Click to upload or drag & drop image</div>
+        <div class="upload-hint">JPG, PNG, WebP — max 5MB</div>
+      </div>
+      <div class="img-preview" id="img-preview">
+        <img id="img-preview-src" src="" alt="Preview"/>
+        <button class="img-preview-remove" onclick="clearImage()" title="Remove image">&times;</button>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field"><label>Product Name *</label><input type="text" id="f-name" placeholder="e.g. Noir Absolu Eau de Parfum"/></div>
+      <div class="field"><label>Brand *</label><input type="text" id="f-brand" placeholder="e.g. Maison Aurum"/></div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Category *</label>
+        <select id="f-category">
+          <option value="">Select category</option>
+          <option>Fragrance</option><option>Timepieces</option><option>Leather Goods</option>
+          <option>Jewellery</option><option>Accessories</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Badge</label>
+        <select id="f-badge">
+          <option value="">No badge</option>
+          <option value="New">New</option>
+          <option value="Sale">Sale</option>
+          <option value="Limited">Limited Edition</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field"><label>Price (USD) *</label><input type="number" id="f-price" placeholder="0.00" min="0" step="0.01"/></div>
+      <div class="field"><label>Original Price (for Sale badge)</label><input type="number" id="f-old-price" placeholder="Optional" min="0" step="0.01"/></div>
+    </div>
+
+    <div class="form-row">
+      <div class="field"><label>Rating (0–5)</label><input type="number" id="f-rating" placeholder="4.8" min="0" max="5" step="0.1"/></div>
+      <div class="field"><label>Review Count</label><input type="number" id="f-reviews" placeholder="0" min="0"/></div>
+    </div>
+
+    <div class="form-row single">
+      <div class="field"><label>Description *</label><textarea id="f-desc" placeholder="Detailed product description visible to customers…"></textarea></div>
+    </div>
+
+    <!-- Sizes / Options -->
+    <div class="form-row single" style="margin-bottom:8px">
+      <div class="field">
+        <label>Size / Colour Options <span style="font-weight:300;text-transform:none;font-size:11px">(comma-separated, optional)</span></label>
+        <input type="text" id="f-sizes" placeholder="e.g. Small, Medium, Large  or  Ivory, Champagne, Midnight"/>
+      </div>
+    </div>
+
+    <!-- Specs Builder -->
+    <div style="margin-bottom:20px">
+      <div class="field" style="margin-bottom:8px"><label>Product Specifications</label></div>
+      <div class="specs-builder" id="specs-builder"></div>
+      <button class="add-spec-btn" onclick="addSpecRow()">+ Add Specification</button>
+    </div>
+
+    <div class="form-row single">
+      <div class="field">
+        <label>Stock Status</label>
+        <select id="f-stock">
+          <option value="true">In Stock</option>
+          <option value="false">Out of Stock</option>
+        </select>
+      </div>
+    </div>
+
+  </div>
+  <div class="drawer-footer">
+    <button class="action-btn secondary" onclick="closeDrawer()" style="flex:none;padding:13px 24px">Cancel</button>
+    <button class="action-btn" onclick="saveProduct()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Save Product
+    </button>
+  </div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div class="confirm-dialog" id="confirm-dialog">
+  <div class="confirm-box">
+    <h3 id="confirm-title">Confirm Action</h3>
+    <p id="confirm-msg">Are you sure you want to proceed?</p>
+    <div class="confirm-btns">
+      <button class="action-btn danger" id="confirm-ok-btn">Confirm</button>
+      <button class="action-btn secondary" onclick="closeConfirm()" style="flex:none;padding:10px 20px">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="admin-toast"><span class="t-icon">✦</span><span id="admin-toast-msg"></span></div>
+
+<script>
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+const CREDS = {user:'admin', pass:'aurum2025'};
+const STORAGE_KEY = 'aurum_products_v3';
+
+function doLogin(){
+  const u=document.getElementById('login-user').value.trim();
+  const p=document.getElementById('login-pass').value;
+  if(u===CREDS.user && p===CREDS.pass){
+    document.getElementById('login-screen').style.opacity='0';
+    document.getElementById('login-screen').style.transition='opacity .4s';
+    setTimeout(()=>{
+      document.getElementById('login-screen').style.display='none';
+      document.getElementById('admin-app').classList.add('visible');
+      document.getElementById('admin-user-badge').textContent=u;
+      initDashboard();
+    },400);
+  } else {
+    document.getElementById('login-error').style.display='block';
+    document.getElementById('login-pass').value='';
+  }
+}
+function doLogout(){
+  document.getElementById('admin-app').classList.remove('visible');
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('login-screen').style.opacity='1';
+  document.getElementById('login-pass').value='';
+  document.getElementById('login-error').style.display='none';
+}
+document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const DEFAULT_PRODUCTS=[
+  {id:1,name:'Noir Absolu Eau de Parfum',brand:'Maison Aurum',category:'Fragrance',price:285,oldPrice:null,badge:'New',rating:4.9,reviews:128,image:null,desc:'A bold oriental fragrance anchored in dark oud, black amber, and smoked vetiver. Noir Absolu opens with bergamot and cardamom before settling into its rich, resinous heart — a scent crafted for those who leave an impression.',specs:[['Volume','50 ml'],['Concentration','Eau de Parfum'],['Notes','Oud, Amber, Vetiver'],['Origin','Grasse, France'],['Longevity','10–14 hours']],sizes:null,inStock:true},
+  {id:2,name:'Constance Mini Leather Bag',brand:'Atelier Cuir',category:'Leather Goods',price:1840,oldPrice:null,badge:'Limited',rating:5.0,reviews:54,image:null,desc:'Handcrafted from a single piece of full-grain tan calfskin, the Constance Mini distills a century of leather tradition into a palm-sized icon. Each bag is numbered and comes with a certificate of authenticity.',specs:[['Material','Full-grain calfskin'],['Hardware','18k gold-plated'],['Interior','Suede-lined'],['Dimensions','18 × 14 × 5 cm'],['Origin','Florence, Italy']],sizes:['Cognac','Tan','Noir','Bordeaux'],inStock:true},
+  {id:3,name:'Prestige Chronograph 41mm',brand:'Calibre 1847',category:'Timepieces',price:4720,oldPrice:5900,badge:'Sale',rating:4.7,reviews:92,image:null,desc:'A master chronograph with Swiss-lever escapement, 72-hour power reserve, and sapphire crystal exhibition case back. The 41mm steel and 18k gold case is water-resistant to 100m and comes with two interchangeable straps.',specs:[['Movement','In-house Cal. 1847'],['Case','Steel & 18k Gold'],['Diameter','41mm'],['Water Resistance','100m'],['Power Reserve','72 hours']],sizes:null,inStock:true},
+  {id:4,name:'Eternal Solitaire Diamond Ring',brand:'Aurum Fine',category:'Jewellery',price:3200,oldPrice:null,badge:'New',rating:4.8,reviews:67,image:null,desc:'A 1.2ct round brilliant diamond, D/VS1 graded, set in a cathedral setting of 18k white gold. Each ring is accompanied by a GIA certificate and arrives in our signature velvet presentation box.',specs:[['Diamond','1.2ct D/VS1 GIA'],['Metal','18k White Gold'],['Setting','Cathedral Prong'],['Certification','GIA Certificate'],['Ring Sizes','5–10']],sizes:['5','6','7','8','9','10'],inStock:true},
+  {id:5,name:'Solar Aviator Gold Sunglasses',brand:'Visage Doré',category:'Accessories',price:420,oldPrice:null,badge:null,rating:4.6,reviews:38,image:null,desc:'Hand-polished 24k gold-filled frames with polarised gradient lenses offering 100% UV400 protection.',specs:[['Frame','24k Gold-filled'],['Lens','Polarised UV400'],['Hinges','Swiss spring hinges'],['Temples','Italian acetate'],['Includes','Hard case & cloth']],sizes:null,inStock:true},
+  {id:6,name:'Heritage Jacquard Silk Scarf',brand:"Soie d'Or",category:'Accessories',price:340,oldPrice:400,badge:'Sale',rating:4.9,reviews:115,image:null,desc:"Woven on antique Jacquard looms in Lyon from 100% mulberry silk, this 90×90cm scarf features a hand-rolled hem and a repeat archive print.",specs:[['Material','100% Mulberry Silk'],['Dimensions','90 × 90 cm'],['Finish','Hand-rolled hem'],['Print','Archive Jacquard'],['Edition','Limited — 500 pieces']],sizes:['Ivory','Champagne','Midnight','Blush'],inStock:true}
+];
+
+function getProducts(){
+  try{const r=localStorage.getItem(STORAGE_KEY);if(r){const p=JSON.parse(r);if(p&&p.length)return p;}}catch(e){}
+  saveProducts(DEFAULT_PRODUCTS);return DEFAULT_PRODUCTS;
+}
+function saveProducts(p){localStorage.setItem(STORAGE_KEY,JSON.stringify(p))}
+function nextId(){const p=getProducts();return p.length?Math.max(...p.map(x=>x.id))+1:1}
+
+// ─── PAGES ───────────────────────────────────────────────────────────────────
+const PAGE_TITLES={dashboard:'Dashboard',products:'Product Management',categories:'Categories',orders:'Orders',customers:'Customers',settings:'Settings'};
+
+function showPage(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+  document.getElementById('topbar-title').textContent=PAGE_TITLES[name]||name;
+  if(name==='products')renderAdminProducts(getProducts());
+  if(name==='categories')renderCategories();
+  if(name==='dashboard')initDashboard();
+}
+
+// ─── DASHBOARD ───────────────────────────────────────────────────────────────
+function initDashboard(){
+  const p=getProducts();
+  document.getElementById('dash-products').textContent=p.length;
+  document.getElementById('dash-active').textContent=p.filter(x=>x.inStock).length;
+  document.getElementById('dash-images').textContent=p.filter(x=>x.image).length;
+  document.getElementById('dash-images').style.color=p.filter(x=>x.image).length===p.length?'var(--green)':'var(--ink)';
+  const cats=new Set(p.map(x=>x.category));
+  document.getElementById('dash-cats').textContent=cats.size;
+  document.getElementById('sidebar-prod-count').textContent=p.length;
+  document.getElementById('dash-products-sub').textContent=p.filter(x=>x.badge==='New').length+' new arrivals';
+  document.getElementById('dash-table-body').innerHTML=p.map(x=>`
+    <tr class="product-row">
+      <td><b style="font-weight:500">${x.name}</b><div style="font-size:11px;color:var(--ink-soft);margin-top:2px">${x.brand}</div></td>
+      <td>${x.category}</td>
+      <td>$${x.price.toLocaleString()}${x.oldPrice?` <span style="font-size:11px;color:var(--ink-soft);text-decoration:line-through">$${x.oldPrice.toLocaleString()}</span>`:''}</td>
+      <td>⭐ ${x.rating}</td>
+      <td><span class="status-pill ${x.inStock?'pill-active':'pill-out'}">${x.inStock?'In Stock':'Out of Stock'}</span>${x.badge?` <span class="status-pill pill-ltd">${x.badge}</span>`:''}</td>
+    </tr>`).join('');
+}
+
+// ─── CATEGORIES ──────────────────────────────────────────────────────────────
+function renderCategories(){
+  const p=getProducts();
+  const cats={};
+  p.forEach(x=>{
+    if(!cats[x.category])cats[x.category]={total:0,inStock:0};
+    cats[x.category].total++;
+    if(x.inStock)cats[x.category].inStock++;
+  });
+  document.getElementById('cats-tbody').innerHTML=Object.entries(cats).map(([name,data])=>`
+    <tr><td><b style="font-weight:500">${name}</b></td><td>${data.total} products</td><td>${data.inStock} in stock</td></tr>
+  `).join('');
+}
+
+// ─── PRODUCT TABLE ────────────────────────────────────────────────────────────
+let filteredProducts=[];
+let currentPage=1;
+const PAGE_SIZE=8;
+
+function renderAdminProducts(products){
+  filteredProducts=products;
+  currentPage=1;
+  renderPage();
+}
+
+function renderPage(){
+  const start=(currentPage-1)*PAGE_SIZE;
+  const slice=filteredProducts.slice(start,start+PAGE_SIZE);
+  const tbody=document.getElementById('admin-products-tbody');
+  if(filteredProducts.length===0){
+    tbody.innerHTML=`<tr><td colspan="7" style="padding:0"><div class="empty-state"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><h3>No products found</h3><p>Try adjusting your filters or add a new product.</p></div></td></tr>`;
+    document.getElementById('pagination').innerHTML='';return;
+  }
+  tbody.innerHTML=slice.map(p=>`
+    <tr class="product-row">
+      <td>
+        <div class="prod-thumb-cell">
+          <div class="prod-thumb">
+            ${p.image?`<img src="${p.image}" alt="${p.name}">`:`<svg width="28" height="36" viewBox="0 0 28 36"><rect x="6" y="10" width="16" height="22" rx="2" fill="#C8A45A" opacity=".4"/></svg>`}
+          </div>
+          <div>
+            <div class="prod-title">${p.name}</div>
+            <div class="prod-subtitle">${p.brand}</div>
+          </div>
+        </div>
+      </td>
+      <td>${p.category}</td>
+      <td>$${p.price.toLocaleString()}${p.oldPrice?`<div style="font-size:11px;color:var(--ink-soft);text-decoration:line-through">$${p.oldPrice.toLocaleString()}</div>`:''}</td>
+      <td>${p.badge?`<span class="status-pill ${p.badge==='New'?'pill-active':p.badge==='Sale'?'pill-out':'pill-ltd'}">${p.badge}</span>`:'-'}</td>
+      <td>${p.image?`<span class="status-pill pill-active">✓ Uploaded</span>`:`<span class="status-pill pill-out">No image</span>`}</td>
+      <td><span class="status-pill ${p.inStock?'pill-active':'pill-out'}">${p.inStock?'In Stock':'Out'}</span></td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button onclick="editProduct(${p.id})" style="padding:6px 12px;border:1px solid var(--border);background:white;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--ink);transition:all .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink)'">Edit</button>
+          <button onclick="confirmDelete(${p.id})" style="padding:6px 10px;border:1px solid rgba(192,57,43,.3);background:white;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--red);transition:all .2s" onmouseover="this.style.background='var(--red)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='var(--red)'">Delete</button>
+        </div>
+      </td>
+    </tr>`).join('');
+  
+  // Pagination
+  const totalPages=Math.ceil(filteredProducts.length/PAGE_SIZE);
+  const pg=document.getElementById('pagination');
+  if(totalPages<=1){pg.innerHTML='';return;}
+  pg.innerHTML=Array.from({length:totalPages},(_,i)=>`<button class="page-btn${i+1===currentPage?' active':''}" onclick="goPage(${i+1})">${i+1}</button>`).join('');
+}
+
+function goPage(n){currentPage=n;renderPage();}
+
+function filterAdminProducts(q){
+  const cat=document.getElementById('cat-filter').value;
+  let r=getProducts();
+  if(q)r=r.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())||p.brand.toLowerCase().includes(q.toLowerCase()));
+  if(cat)r=r.filter(p=>p.category===cat);
+  renderAdminProducts(r);
+}
+function filterAdminByCat(cat){
+  const q=document.querySelector('.search-input-wrap input').value;
+  let r=getProducts();
+  if(q)r=r.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())||p.brand.toLowerCase().includes(q.toLowerCase()));
+  if(cat)r=r.filter(p=>p.category===cat);
+  renderAdminProducts(r);
+}
+
+// ─── DRAWER ───────────────────────────────────────────────────────────────────
+let currentImageData=null;
+
+function openDrawer(product){
+  resetDrawer();
+  if(product){
+    document.getElementById('drawer-title').textContent='Edit Product';
+    document.getElementById('edit-product-id').value=product.id;
+    document.getElementById('f-name').value=product.name||'';
+    document.getElementById('f-brand').value=product.brand||'';
+    document.getElementById('f-category').value=product.category||'';
+    document.getElementById('f-badge').value=product.badge||'';
+    document.getElementById('f-price').value=product.price||'';
+    document.getElementById('f-old-price').value=product.oldPrice||'';
+    document.getElementById('f-rating').value=product.rating||'';
+    document.getElementById('f-reviews').value=product.reviews||'';
+    document.getElementById('f-desc').value=product.desc||'';
+    document.getElementById('f-sizes').value=product.sizes?product.sizes.join(', '):'';
+    document.getElementById('f-stock').value=product.inStock?'true':'false';
+    if(product.image){
+      currentImageData=product.image;
+      document.getElementById('img-preview-src').src=product.image;
+      document.getElementById('img-preview').style.display='block';
+    }
+    if(product.specs)product.specs.forEach(([k,v])=>addSpecRow(k,v));
+    else{addSpecRow();addSpecRow();}
+  } else {
+    document.getElementById('drawer-title').textContent='Add New Product';
+    addSpecRow();addSpecRow();addSpecRow();
+  }
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.getElementById('product-drawer').classList.add('open');
+}
+
+function editProduct(id){
+  const p=getProducts().find(x=>x.id===id);
+  if(p)openDrawer(p);
+}
+
+function closeDrawer(){
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.getElementById('product-drawer').classList.remove('open');
+}
+
+function resetDrawer(){
+  ['f-name','f-brand','f-price','f-old-price','f-rating','f-reviews','f-desc','f-sizes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-category').value='';
+  document.getElementById('f-badge').value='';
+  document.getElementById('f-stock').value='true';
+  document.getElementById('edit-product-id').value='';
+  document.getElementById('specs-builder').innerHTML='';
+  clearImage();
+}
+
+// ─── IMAGE HANDLING ───────────────────────────────────────────────────────────
+function handleImageSelect(input){
+  const file=input.files[0];
+  if(!file)return;
+  if(file.size>5*1024*1024){showAdminToast('Image too large — max 5MB');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    currentImageData=e.target.result;
+    document.getElementById('img-preview-src').src=e.target.result;
+    document.getElementById('img-preview').style.display='block';
+    document.getElementById('upload-area').style.display='none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleDragOver(e){e.preventDefault();document.getElementById('upload-area').classList.add('dragover')}
+function handleDragLeave(){document.getElementById('upload-area').classList.remove('dragover')}
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('upload-area').classList.remove('dragover');
+  const file=e.dataTransfer.files[0];
+  if(file&&file.type.startsWith('image/')){
+    const dt=new DataTransfer();dt.items.add(file);
+    document.getElementById('image-input').files=dt.files;
+    handleImageSelect(document.getElementById('image-input'));
+  }
+}
+function clearImage(){
+  currentImageData=null;
+  document.getElementById('img-preview').style.display='none';
+  document.getElementById('img-preview-src').src='';
+  document.getElementById('upload-area').style.display='block';
+  document.getElementById('image-input').value='';
+}
+
+// ─── SPECS ────────────────────────────────────────────────────────────────────
+function addSpecRow(key='',val=''){
+  const builder=document.getElementById('specs-builder');
+  const row=document.createElement('div');
+  row.className='spec-row-input';
+  row.innerHTML=`
+    <input type="text" placeholder="e.g. Material" value="${key}"/>
+    <input type="text" placeholder="e.g. 18k Gold" value="${val}"/>
+    <button class="spec-remove-btn" onclick="this.closest('.spec-row-input').remove()" title="Remove">&times;</button>
+  `;
+  builder.appendChild(row);
+}
+
+// ─── SAVE PRODUCT ─────────────────────────────────────────────────────────────
+function saveProduct(){
+  const name=document.getElementById('f-name').value.trim();
+  const brand=document.getElementById('f-brand').value.trim();
+  const cat=document.getElementById('f-category').value;
+  const price=parseFloat(document.getElementById('f-price').value);
+  const desc=document.getElementById('f-desc').value.trim();
+
+  if(!name||!brand||!cat||!price||!desc){
+    showAdminToast('Please fill in all required fields');return;
+  }
+
+  const oldPrice=parseFloat(document.getElementById('f-old-price').value)||null;
+  const badge=document.getElementById('f-badge').value||null;
+  const rating=parseFloat(document.getElementById('f-rating').value)||4.5;
+  const reviews=parseInt(document.getElementById('f-reviews').value)||0;
+  const sizesRaw=document.getElementById('f-sizes').value.trim();
+  const sizes=sizesRaw?sizesRaw.split(',').map(s=>s.trim()).filter(Boolean):null;
+  const inStock=document.getElementById('f-stock').value==='true';
+
+  // Gather specs
+  const specRows=document.querySelectorAll('#specs-builder .spec-row-input');
+  const specs=Array.from(specRows).map(row=>{
+    const inputs=row.querySelectorAll('input');
+    return [inputs[0].value.trim(),inputs[1].value.trim()];
+  }).filter(([k,v])=>k&&v);
+
+  const editId=document.getElementById('edit-product-id').value;
+  const products=getProducts();
+
+  if(editId){
+    const idx=products.findIndex(x=>x.id===parseInt(editId));
+    if(idx!==-1){
+      products[idx]={...products[idx],name,brand,category:cat,price,oldPrice,badge,rating,reviews,desc,specs,sizes,inStock,image:currentImageData||products[idx].image};
+    }
+    showAdminToast('Product updated successfully');
+  } else {
+    products.push({id:nextId(),name,brand,category:cat,price,oldPrice,badge,rating,reviews,desc,specs,sizes,inStock,image:currentImageData||null});
+    showAdminToast('Product added successfully');
+  }
+
+  saveProducts(products);
+  closeDrawer();
+  renderAdminProducts(products);
+  initDashboard();
+}
+
+// ─── DELETE ───────────────────────────────────────────────────────────────────
+let pendingDeleteId=null;
+function confirmDelete(id){
+  const p=getProducts().find(x=>x.id===id);
+  pendingDeleteId=id;
+  document.getElementById('confirm-title').textContent='Delete Product';
+  document.getElementById('confirm-msg').textContent=`Are you sure you want to delete "${p.name}"? This action cannot be undone.`;
+  document.getElementById('confirm-ok-btn').onclick=()=>{
+    const products=getProducts().filter(x=>x.id!==id);
+    saveProducts(products);renderAdminProducts(products);initDashboard();
+    closeConfirm();showAdminToast('Product deleted');
+  };
+  document.getElementById('confirm-dialog').classList.add('open');
+}
+function closeConfirm(){document.getElementById('confirm-dialog').classList.remove('open')}
+
+// ─── SETTINGS ────────────────────────────────────────────────────────────────
+function saveSettings(){
+  const p1=document.getElementById('set-pass').value;
+  const p2=document.getElementById('set-pass2').value;
+  if(p1&&p1!==p2){showAdminToast('Passwords do not match');return;}
+  if(p1)CREDS.pass=p1;
+  showAdminToast('Settings saved');
+}
+function exportData(){
+  const data=JSON.stringify(getProducts(),null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='aurum-products.json';a.click();
+  showAdminToast('Products exported');
+}
+function importData(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{const p=JSON.parse(e.target.result);saveProducts(p);renderAdminProducts(p);initDashboard();showAdminToast(p.length+' products imported');}
+    catch(err){showAdminToast('Invalid JSON file');}
+  };
+  reader.readAsText(file);
+}
+function confirmResetData(){
+  document.getElementById('confirm-title').textContent='Reset All Data';
+  document.getElementById('confirm-msg').textContent='This will delete all current products and restore the default catalogue. This cannot be undone.';
+  document.getElementById('confirm-ok-btn').onclick=()=>{
+    saveProducts(DEFAULT_PRODUCTS);renderAdminProducts(DEFAULT_PRODUCTS);initDashboard();closeConfirm();showAdminToast('Data reset to defaults');
+  };
+  document.getElementById('confirm-dialog').classList.add('open');
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function showAdminToast(msg){
+  const t=document.getElementById('admin-toast');
+  document.getElementById('admin-toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ─── KEYBOARD ─────────────────────────────────────────────────────────────────
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeDrawer();closeConfirm();}
+});
+</script>
+</body>
+</html>
