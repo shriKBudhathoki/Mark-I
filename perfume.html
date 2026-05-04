@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURUM — Curated Luxury Goods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#B8964E;--gold-light:#D4AF72;--gold-pale:#F5EDD8;
+  --ink:#1A1612;--ink-mid:#3D3530;--ink-soft:#7A6F68;
+  --cream:#FAF8F3;--white:#FFFFFF;
+  --border:rgba(184,150,78,0.2);--border-soft:rgba(26,22,18,0.08);
+  --shadow:0 8px 40px rgba(26,22,18,0.12);
+  --shadow-lg:0 24px 80px rgba(26,22,18,0.18);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+/* ─── NAV ─────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(250,248,243,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-soft);height:72px;padding:0 6%;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;letter-spacing:0.14em;color:var(--ink);text-decoration:none}
+.nav-logo span{color:var(--gold)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{text-decoration:none;font-size:12px;font-weight:400;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-actions{display:flex;align-items:center;gap:20px}
+.nav-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:0.06em;color:var(--ink-mid);transition:color .2s;padding:8px 0}
+.nav-btn:hover{color:var(--gold)}
+.cart-badge{background:var(--gold);color:white;font-size:10px;width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:500}
+.admin-link{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;border:1px solid var(--border);padding:7px 16px;transition:all .2s}
+.admin-link:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ─── SEARCH BAR ──────────────────────────────────── */
+.search-bar{position:fixed;top:72px;left:0;right:0;background:var(--white);border-bottom:1px solid var(--border-soft);padding:18px 6%;z-index:190;display:none;align-items:center;gap:14px;box-shadow:var(--shadow)}
+.search-bar.open{display:flex}
+.search-bar input{flex:1;font-size:20px;font-family:'Cormorant Garamond',serif;border:none;background:none;outline:none;color:var(--ink)}
+.search-bar input::placeholder{color:var(--ink-soft)}
+.search-close{background:none;border:none;cursor:pointer;color:var(--ink-soft);font-size:24px;line-height:1}
+
+/* ─── HERO ────────────────────────────────────────── */
+.hero{margin-top:72px;min-height:calc(100vh - 72px);display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.hero-text{display:flex;flex-direction:column;justify-content:center;padding:8% 6% 8% 8%}
+.hero-eyebrow{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow::before{content:'';display:block;width:40px;height:1px;background:var(--gold)}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,5.5vw,80px);font-weight:300;line-height:1.07;color:var(--ink);margin-bottom:28px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:16px;color:var(--ink-soft);max-width:400px;margin-bottom:44px;line-height:1.75;font-weight:300}
+.hero-cta{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.btn-primary{display:inline-block;padding:14px 36px;background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;text-decoration:none;border:none;cursor:pointer;transition:background .25s,transform .2s}
+.btn-primary:hover{background:var(--gold);transform:translateY(-1px)}
+.btn-ghost{display:inline-block;padding:14px 28px;background:transparent;color:var(--ink-mid);font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;text-decoration:none;border:1px solid var(--border);cursor:pointer;transition:border-color .2s,color .2s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.hero-visual{background:#1E1A14;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.hero-visual-bg{position:absolute;inset:0;background:radial-gradient(circle at 60% 40%,rgba(184,150,78,0.08) 0%,transparent 60%)}
+.hero-visual svg{position:relative;z-index:1}
+
+/* ─── STATS ───────────────────────────────────────── */
+.stats-bar{background:var(--ink);padding:28px 8%;display:flex;justify-content:space-between;align-items:center}
+.stat-item{text-align:center}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:500;color:var(--gold-light);display:block}
+.stat-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-top:4px}
+.stat-div{width:1px;height:44px;background:rgba(184,150,78,0.15)}
+
+/* ─── SECTIONS ────────────────────────────────────── */
+.section{padding:96px 6%}
+.section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:52px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:400;line-height:1.1;color:var(--ink)}
+.section-title small{display:block;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:8px}
+.section-link{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:color .2s,border-color .2s}
+.section-link:hover{color:var(--gold);border-color:var(--gold)}
+
+/* ─── CATEGORY GRID ───────────────────────────────── */
+.categories-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.cat-card{position:relative;overflow:hidden;cursor:pointer;background:var(--ink);border:1px solid transparent;transition:border-color .3s}
+.cat-card:hover{border-color:var(--border)}
+.cat-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(26,22,18,0.8) 0%,transparent 55%);pointer-events:none}
+.cat-bg{aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;transition:transform .5s ease}
+.cat-card:hover .cat-bg{transform:scale(1.04)}
+.cat-info{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:24px 20px}
+.cat-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:white;display:block;margin-bottom:4px}
+.cat-count{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.45)}
+
+/* ─── FILTER BAR ──────────────────────────────────── */
+.filter-bar{display:flex;gap:8px;margin-bottom:36px;flex-wrap:wrap;padding-bottom:24px;border-bottom:1px solid var(--border-soft)}
+.filter-btn{padding:8px 20px;border:1px solid var(--border-soft);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);transition:all .2s}
+.filter-btn:hover,.filter-btn.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+
+/* ─── PRODUCT GRID ────────────────────────────────── */
+.products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.product-card{background:var(--white);cursor:pointer;overflow:hidden;border:1px solid var(--border-soft);transition:box-shadow .3s,transform .3s}
+.product-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.product-img-wrap{aspect-ratio:4/5;background:#F2EDE4;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.product-img-wrap img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.product-img-wrap .svg-placeholder{position:relative;z-index:1}
+.img-loaded .svg-placeholder{display:none}
+.product-badge{position:absolute;top:14px;left:14px;z-index:3;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 11px;font-weight:500;font-family:'DM Sans',sans-serif}
+.badge-new{background:var(--ink);color:var(--cream)}
+.badge-sale{background:var(--gold);color:white}
+.badge-ltd{background:transparent;border:1px solid rgba(26,22,18,0.4);color:var(--ink-soft)}
+.product-hover{position:absolute;bottom:-52px;left:0;right:0;background:rgba(26,22,18,0.9);padding:14px 18px;text-align:center;transition:bottom .3s ease;z-index:2}
+.product-card:hover .product-hover{bottom:0}
+.product-hover button{background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--cream);font-weight:500;width:100%}
+.product-info{padding:18px 20px 20px}
+.prod-brand{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.prod-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--ink);margin-bottom:10px;line-height:1.3}
+.prod-price-row{display:flex;align-items:center;gap:10px}
+.price{font-size:16px;font-weight:500;color:var(--ink)}
+.price-old{font-size:13px;color:var(--ink-soft);text-decoration:line-through}
+.stars{color:var(--gold);font-size:13px;letter-spacing:-2px}
+.rating{font-size:12px;color:var(--ink-soft);margin-left:auto;display:flex;align-items:center;gap:4px}
+
+/* ─── PRODUCT MODAL ───────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(26,22,18,0.6);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);max-width:1060px;width:100%;position:relative;animation:modalIn .3s ease}
+@keyframes modalIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.modal-close{position:absolute;top:20px;right:20px;background:none;border:none;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:22px;z-index:10;transition:color .2s;border:1px solid var(--border-soft)}
+.modal-close:hover{color:var(--ink);border-color:var(--border)}
+.modal-body{display:grid;grid-template-columns:1fr 1fr}
+.modal-gallery{background:#F2EDE4;display:flex;align-items:center;justify-content:center;min-height:560px;position:relative;overflow:hidden}
+.modal-gallery img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.modal-gallery .modal-svg{position:relative;z-index:1}
+.modal-content{padding:48px 44px;display:flex;flex-direction:column;overflow-y:auto;max-height:560px}
+.modal-brand{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.modal-name{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:400;line-height:1.15;color:var(--ink);margin-bottom:16px}
+.modal-rating{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.modal-rating .stars{font-size:15px}
+.modal-rating span{font-size:13px;color:var(--ink-soft)}
+.modal-price-row{display:flex;align-items:baseline;gap:12px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border-soft)}
+.modal-price{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--ink)}
+.modal-price-old{font-size:16px;color:var(--ink-soft);text-decoration:line-through}
+.modal-desc{font-size:14px;color:var(--ink-soft);line-height:1.8;margin-bottom:24px;font-weight:300}
+.modal-specs{margin-bottom:28px}
+.spec-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-soft);font-size:13px}
+.spec-row:first-child{border-top:1px solid var(--border-soft)}
+.spec-label{color:var(--ink-soft);font-weight:300}
+.spec-val{color:var(--ink);font-weight:400}
+.modal-sizes{margin-bottom:24px}
+.modal-sizes label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:10px}
+.sizes-wrap{display:flex;gap:8px;flex-wrap:wrap}
+.size-btn{padding:8px 16px;border:1px solid var(--border-soft);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);transition:all .2s}
+.size-btn:hover,.size-btn.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.modal-actions{display:flex;gap:12px;margin-top:auto;padding-top:16px}
+.modal-actions .btn-primary{flex:1;text-align:center;padding:16px}
+.modal-actions .btn-wish{width:50px;height:50px;border:1px solid var(--border-soft);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.modal-actions .btn-wish:hover{border-color:var(--gold)}
+
+/* ─── RELATED PRODUCTS SCROLL ─────────────────────── */
+.related-section{padding:40px 44px;border-top:1px solid var(--border-soft)}
+.related-title{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:20px}
+.related-scroll{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x mandatory}
+.related-scroll::-webkit-scrollbar{height:2px}
+.related-scroll::-webkit-scrollbar-track{background:var(--border-soft)}
+.related-scroll::-webkit-scrollbar-thumb{background:var(--gold)}
+.related-item{flex:0 0 160px;cursor:pointer;scroll-snap-align:start;transition:transform .2s}
+.related-item:hover{transform:translateY(-3px)}
+.related-img{width:160px;height:200px;background:#F2EDE4;display:flex;align-items:center;justify-content:center;margin-bottom:10px;overflow:hidden;position:relative}
+.related-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.related-img .svg-pl{position:relative;z-index:1}
+.related-item-name{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--ink);line-height:1.3;margin-bottom:4px}
+.related-item-price{font-size:13px;font-weight:500;color:var(--gold)}
+
+/* ─── BANNER ──────────────────────────────────────── */
+.banner{background:var(--ink);padding:80px 8%;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;overflow:hidden}
+.banner::before{content:'AURUM';position:absolute;right:-1%;top:50%;transform:translateY(-50%);font-family:'Cormorant Garamond',serif;font-size:200px;font-weight:600;color:rgba(184,150,78,0.04);letter-spacing:-0.02em;line-height:1;pointer-events:none}
+.banner-eyebrow{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.banner h2{font-family:'Cormorant Garamond',serif;font-size:46px;font-weight:300;line-height:1.1;color:white;margin-bottom:20px}
+.banner p{color:rgba(255,255,255,0.45);font-weight:300;line-height:1.75;margin-bottom:36px;max-width:420px;font-size:15px}
+
+/* ─── TESTIMONIALS ────────────────────────────────── */
+.testimonials{background:var(--white);padding:80px 6%}
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:52px}
+.test-card{padding:32px;border:1px solid var(--border-soft);position:relative}
+.test-card::before{content:'\201C';font-family:'Cormorant Garamond',serif;font-size:72px;color:var(--gold-pale);position:absolute;top:10px;left:22px;line-height:1}
+.test-text{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;line-height:1.65;color:var(--ink-mid);margin-bottom:22px;position:relative;z-index:1}
+.test-author{display:flex;align-items:center;gap:12px}
+.test-avatar{width:40px;height:40px;border-radius:50%;background:var(--gold-pale);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);font-weight:500}
+.test-name{font-size:14px;font-weight:500;color:var(--ink)}
+.test-loc{font-size:12px;color:var(--ink-soft)}
+
+/* ─── NEWSLETTER ──────────────────────────────────── */
+.newsletter{background:var(--gold-pale);padding:72px 8%;text-align:center}
+.newsletter h2{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:400;margin-bottom:12px;color:var(--ink)}
+.newsletter p{color:var(--ink-soft);font-weight:300;margin-bottom:36px;font-size:16px}
+.nl-form{display:flex;max-width:480px;margin:0 auto}
+.nl-form input{flex:1;padding:14px 20px;border:1px solid var(--border);background:white;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none}
+.nl-form input::placeholder{color:var(--ink-soft)}
+.nl-form button{padding:14px 28px;background:var(--ink);color:white;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;white-space:nowrap;transition:background .2s}
+.nl-form button:hover{background:var(--gold)}
+
+/* ─── FOOTER ──────────────────────────────────────── */
+footer{background:var(--ink);color:rgba(255,255,255,0.35);padding:64px 6% 36px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:56px}
+.footer-brand-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;letter-spacing:0.14em;color:white;display:block;margin-bottom:16px;text-decoration:none}
+.footer-brand-logo span{color:var(--gold)}
+.footer-brand p{font-size:14px;line-height:1.7;font-weight:300;max-width:280px}
+.footer-col h4{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;font-weight:500}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:10px}
+.footer-col a{text-decoration:none;font-size:13px;color:rgba(255,255,255,0.35);font-weight:300;transition:color .2s}
+.footer-col a:hover{color:var(--gold-light)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.06);padding-top:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-bottom p{font-size:12px}
+.footer-legal{display:flex;gap:24px}
+.footer-legal a{font-size:12px;color:rgba(255,255,255,0.25);text-decoration:none;transition:color .2s}
+.footer-legal a:hover{color:rgba(255,255,255,0.55)}
+.footer-badges{display:flex;gap:12px;align-items:center}
+.footer-badge{padding:5px 12px;border:1px solid rgba(255,255,255,0.1);font-size:10px;letter-spacing:0.08em;color:rgba(255,255,255,0.25)}
+
+/* ─── CART SIDEBAR ────────────────────────────────── */
+.cart-overlay{position:fixed;inset:0;z-index:400;background:rgba(26,22,18,0.5);display:none}
+.cart-overlay.open{display:block}
+.cart-panel{position:fixed;top:0;right:-460px;bottom:0;width:440px;background:var(--cream);z-index:401;transition:right .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,0.15)}
+.cart-panel.open{right:0}
+.cart-header{padding:24px 28px 20px;border-bottom:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between}
+.cart-header h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400}
+.cart-header-sub{font-size:11px;color:var(--ink-soft);margin-top:2px}
+.cart-close-btn{background:none;border:none;cursor:pointer;font-size:22px;color:var(--ink-soft);transition:color .2s;line-height:1}
+.cart-close-btn:hover{color:var(--ink)}
+.cart-items{flex:1;overflow-y:auto;padding:8px 28px}
+.cart-item{display:flex;gap:16px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--border-soft)}
+.ci-img{width:72px;height:88px;background:#F2EDE4;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.ci-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.ci-img .svg-sm{position:relative;z-index:1}
+.ci-info{flex:1}
+.ci-brand{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
+.ci-name{font-family:'Cormorant Garamond',serif;font-size:16px;margin-bottom:8px;line-height:1.3}
+.ci-price{font-size:14px;font-weight:500}
+.ci-remove{background:none;border:none;cursor:pointer;color:var(--ink-soft);font-size:20px;padding:2px;line-height:1;transition:color .2s}
+.ci-remove:hover{color:var(--ink)}
+.cart-footer{padding:20px 28px 32px;border-top:1px solid var(--border-soft)}
+.cart-sub{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.cart-sub span{font-size:13px;color:var(--ink-soft)}
+.cart-sub strong{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400}
+.cart-note{font-size:11px;color:var(--ink-soft);text-align:center;margin:12px 0 18px;letter-spacing:0.04em;line-height:1.6}
+.empty-cart{text-align:center;padding:60px 20px;color:var(--ink-soft)}
+.empty-cart svg{margin-bottom:16px;opacity:.4}
+.empty-cart p{font-family:'Cormorant Garamond',serif;font-size:20px;margin-bottom:8px;color:var(--ink)}
+.empty-cart span{font-size:13px}
+
+/* ─── TOAST ───────────────────────────────────────── */
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--ink);color:white;padding:13px 28px;font-size:13px;letter-spacing:0.05em;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:900;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast-icon{color:var(--gold)}
+
+/* ─── TRUST BADGES ────────────────────────────────── */
+.trust-bar{background:var(--white);border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);padding:28px 6%;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.trust-item{display:flex;align-items:center;gap:14px}
+.trust-icon{width:40px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.trust-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px}
+.trust-sub{font-size:12px;color:var(--ink-soft);font-weight:300}
+
+/* ══════════════════════════════════════════════════════
+   BILLING / CHECKOUT FEATURE
+   ══════════════════════════════════════════════════════ */
+
+/* ─── BILLING MODAL OVERLAY ───────────────────────── */
+.billing-overlay{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(26,22,18,0.72);backdrop-filter:blur(6px);
+  display:none;align-items:flex-start;justify-content:center;
+  padding:32px 16px;overflow-y:auto;
+}
+.billing-overlay.open{display:flex}
+
+/* ─── BILLING MODAL ───────────────────────────────── */
+.billing-modal{
+  background:var(--white);max-width:920px;width:100%;
+  position:relative;animation:modalIn .35s ease;
+  display:flex;flex-direction:column;
+}
+
+/* ─── BILLING HEADER ──────────────────────────────── */
+.billing-header{
+  padding:32px 40px 24px;
+  border-bottom:1px solid var(--border-soft);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.billing-header-left{}
+.billing-logo{
+  font-family:'Cormorant Garamond',serif;font-size:22px;
+  font-weight:500;letter-spacing:0.14em;color:var(--ink);
+  text-decoration:none;
+}
+.billing-logo span{color:var(--gold)}
+.billing-header h2{
+  font-family:'Cormorant Garamond',serif;font-size:28px;
+  font-weight:400;color:var(--ink);margin-top:6px;
+}
+.billing-close{
+  background:none;border:1px solid var(--border-soft);cursor:pointer;
+  width:40px;height:40px;display:flex;align-items:center;
+  justify-content:center;color:var(--ink-soft);font-size:22px;
+  transition:all .2s;flex-shrink:0;
+}
+.billing-close:hover{border-color:var(--border);color:var(--ink)}
+
+/* ─── BILLING STEPS BAR ───────────────────────────── */
+.billing-steps{
+  display:flex;align-items:center;gap:0;
+  padding:20px 40px;border-bottom:1px solid var(--border-soft);
+  background:var(--cream);
+}
+.billing-step{
+  display:flex;align-items:center;gap:10px;
+  font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--ink-soft);font-weight:400;flex:1;
+}
+.billing-step.active{color:var(--ink)}
+.billing-step.done{color:var(--gold)}
+.step-num{
+  width:26px;height:26px;border-radius:50%;
+  border:1px solid currentColor;display:flex;
+  align-items:center;justify-content:center;
+  font-size:11px;font-weight:500;flex-shrink:0;
+  transition:all .3s;
+}
+.billing-step.done .step-num{
+  background:var(--gold);border-color:var(--gold);color:white;
+  font-size:12px;
+}
+.billing-step.active .step-num{
+  background:var(--ink);border-color:var(--ink);color:var(--cream);
+}
+.step-divider{flex:0 0 32px;height:1px;background:var(--border-soft);margin:0 8px}
+
+/* ─── BILLING BODY ────────────────────────────────── */
+.billing-body{
+  display:grid;grid-template-columns:1fr 380px;
+  min-height:500px;
+}
+
+/* ─── BILLING FORM AREA ───────────────────────────── */
+.billing-form-area{
+  padding:36px 40px;overflow-y:auto;max-height:640px;
+  border-right:1px solid var(--border-soft);
+}
+.billing-section-title{
+  font-family:'Cormorant Garamond',serif;font-size:20px;
+  font-weight:400;color:var(--ink);margin-bottom:20px;
+  padding-bottom:12px;border-bottom:1px solid var(--border-soft);
+  display:flex;align-items:center;gap:10px;
+}
+.billing-section-title svg{flex-shrink:0}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form-row.single{grid-template-columns:1fr}
+.form-row.thirds{grid-template-columns:1fr 1fr 1fr}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{
+  font-size:10px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink-soft);font-weight:500;
+}
+.form-group input,
+.form-group select{
+  padding:12px 14px;
+  border:1px solid var(--border-soft);
+  background:var(--cream);
+  font-family:'DM Sans',sans-serif;font-size:14px;
+  color:var(--ink);outline:none;
+  transition:border-color .2s,background .2s;
+  appearance:none;-webkit-appearance:none;
+}
+.form-group input:focus,
+.form-group select:focus{
+  border-color:var(--gold);background:var(--white);
+}
+.form-group input.error,
+.form-group select.error{border-color:#C84040}
+.form-group .field-error{
+  font-size:11px;color:#C84040;display:none;
+}
+.form-group.has-error .field-error{display:block}
+.form-group.has-error input,
+.form-group.has-error select{border-color:#C84040}
+.select-wrap{position:relative}
+.select-wrap::after{
+  content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  width:0;height:0;border-left:4px solid transparent;
+  border-right:4px solid transparent;border-top:5px solid var(--ink-soft);
+  pointer-events:none;
+}
+.select-wrap select{padding-right:32px;width:100%;cursor:pointer}
+
+/* ─── CARD INPUT STYLING ──────────────────────────── */
+.card-input-wrap{position:relative}
+.card-input-wrap input{padding-right:52px}
+.card-brand-icon{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  display:flex;gap:4px;align-items:center;
+}
+.card-brand-icon span{
+  font-size:9px;letter-spacing:0.05em;
+  border:1px solid var(--border-soft);
+  padding:2px 5px;color:var(--ink-soft);
+  border-radius:2px;background:white;
+}
+.card-brand-icon span.active{
+  border-color:var(--gold);color:var(--gold);
+}
+
+/* ─── PAYMENT TABS ────────────────────────────────── */
+.payment-tabs{
+  display:flex;gap:0;margin-bottom:24px;
+  border:1px solid var(--border-soft);
+}
+.pay-tab{
+  flex:1;padding:11px 8px;background:transparent;
+  border:none;cursor:pointer;font-family:'DM Sans',sans-serif;
+  font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--ink-soft);transition:all .2s;
+  border-right:1px solid var(--border-soft);display:flex;
+  align-items:center;justify-content:center;gap:6px;
+}
+.pay-tab:last-child{border-right:none}
+.pay-tab:hover{background:var(--cream)}
+.pay-tab.active{background:var(--ink);color:var(--cream)}
+.pay-tab svg{flex-shrink:0}
+
+/* ─── SECURE BADGE ────────────────────────────────── */
+.secure-badge{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;background:var(--cream);
+  border:1px solid var(--border-soft);
+  font-size:11px;color:var(--ink-soft);margin-top:20px;
+}
+.secure-badge svg{color:var(--gold);flex-shrink:0}
+
+/* ─── BILLING STEP PANELS ─────────────────────────── */
+.billing-step-panel{display:none}
+.billing-step-panel.active{display:block}
+
+/* ─── BILLING SUMMARY SIDEBAR ─────────────────────── */
+.billing-summary{
+  padding:28px 28px;background:var(--cream);
+  display:flex;flex-direction:column;
+}
+.summary-title{
+  font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:20px;font-weight:500;
+}
+.summary-items{flex:1;overflow-y:auto;max-height:300px;margin-bottom:16px}
+.summary-item{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:12px 0;border-bottom:1px solid var(--border-soft);
+}
+.si-img{
+  width:52px;height:64px;background:#F2EDE4;
+  flex-shrink:0;display:flex;align-items:center;
+  justify-content:center;overflow:hidden;position:relative;
+}
+.si-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.si-img .svg-tiny{position:relative;z-index:1}
+.si-info{flex:1}
+.si-name{
+  font-family:'Cormorant Garamond',serif;font-size:14px;
+  color:var(--ink);line-height:1.3;margin-bottom:3px;
+}
+.si-brand{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold)}
+.si-price{font-size:13px;font-weight:500;color:var(--ink);white-space:nowrap}
+.si-qty{
+  font-size:10px;color:var(--ink-soft);margin-top:2px;
+}
+
+/* ─── SUMMARY TOTALS ──────────────────────────────── */
+.summary-divider{height:1px;background:var(--border-soft);margin:12px 0}
+.summary-line{
+  display:flex;justify-content:space-between;
+  font-size:13px;color:var(--ink-soft);margin-bottom:8px;
+}
+.summary-line.total{
+  color:var(--ink);font-weight:500;font-size:15px;
+  margin-top:4px;margin-bottom:0;
+  font-family:'Cormorant Garamond',serif;font-size:20px;
+}
+.summary-line.total span:last-child{font-weight:400}
+.summary-promo{
+  display:flex;gap:8px;margin-top:16px;
+}
+.summary-promo input{
+  flex:1;padding:10px 12px;
+  border:1px solid var(--border-soft);
+  font-family:'DM Sans',sans-serif;font-size:13px;
+  color:var(--ink);outline:none;background:white;
+  transition:border-color .2s;
+}
+.summary-promo input:focus{border-color:var(--gold)}
+.summary-promo button{
+  padding:10px 16px;background:transparent;
+  border:1px solid var(--border-soft);cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:11px;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--ink-mid);transition:all .2s;white-space:nowrap;
+}
+.summary-promo button:hover{border-color:var(--gold);color:var(--gold)}
+.promo-applied{
+  font-size:11px;color:var(--gold);margin-top:6px;display:none;
+}
+.promo-applied.show{display:block}
+.summary-guarantee{
+  margin-top:16px;padding:12px;background:white;
+  border:1px solid var(--border-soft);font-size:11px;
+  color:var(--ink-soft);line-height:1.6;
+  display:flex;gap:8px;align-items:flex-start;
+}
+.summary-guarantee svg{flex-shrink:0;margin-top:1px;color:var(--gold)}
+
+/* ─── BILLING FOOTER ──────────────────────────────── */
+.billing-footer{
+  padding:20px 40px;border-top:1px solid var(--border-soft);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;
+}
+.billing-back{
+  background:none;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:12px;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--ink-soft);display:flex;align-items:center;gap:8px;
+  transition:color .2s;padding:0;
+}
+.billing-back:hover{color:var(--ink)}
+.billing-back svg{flex-shrink:0}
+.billing-next{
+  padding:14px 40px;background:var(--ink);color:var(--cream);
+  border:none;cursor:pointer;font-family:'DM Sans',sans-serif;
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+  font-weight:500;transition:background .25s,transform .2s;
+  display:flex;align-items:center;gap:10px;
+}
+.billing-next:hover{background:var(--gold);transform:translateY(-1px)}
+.billing-next:disabled{background:var(--ink-soft);cursor:not-allowed;transform:none}
+
+/* ─── ORDER CONFIRMATION ──────────────────────────── */
+.order-confirm{
+  display:none;flex-direction:column;align-items:center;
+  justify-content:center;padding:60px 40px;text-align:center;
+  background:var(--white);
+}
+.order-confirm.active{display:flex}
+.confirm-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--gold-pale);display:flex;align-items:center;
+  justify-content:center;margin-bottom:24px;
+}
+.confirm-icon svg{color:var(--gold)}
+.confirm-order-num{
+  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px;
+}
+.confirm-title{
+  font-family:'Cormorant Garamond',serif;font-size:36px;
+  font-weight:400;color:var(--ink);margin-bottom:12px;
+  line-height:1.15;
+}
+.confirm-subtitle{
+  font-size:15px;color:var(--ink-soft);font-weight:300;
+  max-width:420px;line-height:1.7;margin-bottom:32px;
+}
+.confirm-details{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  width:100%;max-width:580px;margin-bottom:36px;
+}
+.confirm-detail-card{
+  background:var(--cream);padding:16px;text-align:center;
+}
+.cdc-label{
+  font-size:10px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:6px;
+}
+.cdc-value{
+  font-family:'Cormorant Garamond',serif;font-size:17px;
+  font-weight:400;color:var(--ink);
+}
+.confirm-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+
+/* ─── RESPONSIVE ──────────────────────────────────── */
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero-visual{height:55vw}
+  .categories-grid{grid-template-columns:repeat(2,1fr)}
+  .products-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .modal-body{grid-template-columns:1fr}
+  .modal-gallery{min-height:300px}
+  .trust-bar{grid-template-columns:repeat(2,1fr)}
+  .testimonials-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .stats-bar{flex-wrap:wrap;gap:24px;justify-content:center}
+  .stat-div{display:none}
+  .billing-body{grid-template-columns:1fr}
+  .billing-summary{border-top:1px solid var(--border-soft)}
+  .billing-header{padding:24px 20px 18px}
+  .billing-steps{padding:16px 20px}
+  .billing-form-area{padding:24px 20px;max-height:none}
+  .billing-footer{padding:16px 20px}
+  .form-row{grid-template-columns:1fr}
+  .form-row.thirds{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="index.html" class="nav-logo">AUR<span>U</span>M</a>
+  <ul class="nav-links">
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#new">New Arrivals</a></li>
+    <li><a href="#editorial">The Edit</a></li>
+    <li><a href="#about">Our Story</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-btn" onclick="toggleSearch()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Search
+    </button>
+    <a href="admin.html" class="admin-link">Admin</a>
+    <button class="nav-btn" onclick="openCart()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      Cart <span class="cart-badge" id="cart-count">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- SEARCH -->
+<div class="search-bar" id="search-bar">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7A6F68" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  <input type="text" placeholder="Search for products, brands, collections…" id="search-input" oninput="handleSearch(this.value)"/>
+  <button class="search-close" onclick="toggleSearch()">&times;</button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <span class="hero-eyebrow">New Collection 2025</span>
+    <h1>Where craft<br>meets <em>desire</em></h1>
+    <p class="hero-desc">Curated luxury goods from the world's most exceptional ateliers. Each piece tells a story of uncompromising artisanship.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="document.getElementById('new').scrollIntoView({behavior:'smooth'})">Explore Collection</button>
+      <a href="#about" class="btn-ghost">Our Story</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-visual-bg"></div>
+    <svg width="280" height="400" viewBox="0 0 280 400" style="position:relative;z-index:1">
+      <defs>
+        <linearGradient id="hg1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#C8A45A;stop-opacity:0.65"/><stop offset="50%" style="stop-color:#E8C878;stop-opacity:0.9"/><stop offset="100%" style="stop-color:#A87830;stop-opacity:0.6"/></linearGradient>
+        <linearGradient id="hg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#D4B060"/><stop offset="100%" style="stop-color:#886830"/></linearGradient>
+      </defs>
+      <rect x="80" y="140" width="120" height="200" rx="10" fill="url(#hg1)"/>
+      <rect x="93" y="153" width="94" height="174" rx="6" fill="rgba(255,242,200,0.12)"/>
+      <rect x="102" y="95" width="76" height="52" rx="5" fill="url(#hg1)" opacity="0.85"/>
+      <rect x="92" y="76" width="96" height="24" rx="3" fill="url(#hg2)"/>
+      <rect x="100" y="228" width="80" height="68" rx="2" fill="rgba(255,255,255,0.1)"/>
+      <text x="140" y="253" text-anchor="middle" fill="rgba(255,248,210,0.95)" font-family="serif" font-size="10" letter-spacing="3">AURUM</text>
+      <text x="140" y="270" text-anchor="middle" fill="rgba(255,248,210,0.5)" font-family="serif" font-size="8" font-style="italic">Eau de Parfum</text>
+      <line x1="108" y1="280" x2="172" y2="280" stroke="rgba(255,240,200,0.25)" stroke-width="0.5"/>
+      <text x="140" y="292" text-anchor="middle" fill="rgba(255,240,200,0.4)" font-family="sans-serif" font-size="8" letter-spacing="1">50 ML</text>
+      <rect x="90" y="135" width="100" height="12" rx="3" fill="url(#hg2)"/>
+      <circle cx="200" cy="120" r="52" fill="none" stroke="#C8A45A" stroke-width="1.5"/>
+      <circle cx="200" cy="120" r="44" fill="#1A1612"/>
+      <text x="200" y="113" text-anchor="middle" fill="#C8A45A" font-family="serif" font-size="8" letter-spacing="2">AURUM</text>
+      <line x1="200" y1="120" x2="200" y2="88" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="200" y1="120" x2="216" y2="120" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="200" cy="120" r="2" fill="#C8A45A"/>
+      <ellipse cx="68" cy="270" rx="28" ry="10" fill="rgba(200,164,90,0.08)"/>
+      <path d="M40 255 Q68 245 96 255 Q96 265 68 270 Q40 265 40 255 Z" fill="none" stroke="#C8A45A" stroke-width="2.5"/>
+      <polygon points="68,225 58,237 68,248 78,237" fill="rgba(220,230,255,0.5)" stroke="#C8A45A" stroke-width="1.5"/>
+      <polygon points="68,225 63,233 68,238 73,233" fill="rgba(255,255,255,0.6)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-num" id="stat-products">0</span><div class="stat-label">Curated Products</div></div>
+  <div class="stat-div"></div>
+  <div class="stat-item"><span class="stat-num">180</span><div class="stat-label">Luxury Brands</div></div>
+  <div class="stat-div"></div>
+  <div class="stat-item"><span class="stat-num">98%</span><div class="stat-label">Satisfaction Rate</div></div>
+  <div class="stat-div"></div>
+  <div class="stat-item"><span class="stat-num">42</span><div class="stat-label">Countries Delivered</div></div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item">
+    <div class="trust-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 3L4 8v8c0 7 5.4 13 12 15 6.6-2 12-8 12-15V8L16 3z" stroke="#B8964E" stroke-width="1.5" fill="none"/><path d="M11 16l3 3 7-7" stroke="#B8964E" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+    <div><div class="trust-title">100% Authentic</div><div class="trust-sub">Every item certified & verified</div></div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="3" y="8" width="26" height="18" rx="2" stroke="#B8964E" stroke-width="1.5"/><path d="M3 14h26" stroke="#B8964E" stroke-width="1.5"/></svg></div>
+    <div><div class="trust-title">Secure Payments</div><div class="trust-sub">256-bit SSL encryption</div></div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M5 16.5L3 21l5-1 14-14-4-4L5 16.5z" stroke="#B8964E" stroke-width="1.5"/><path d="M20 7l4 4" stroke="#B8964E" stroke-width="1.5"/><path d="M3 29h26" stroke="#B8964E" stroke-width="1.5"/></svg></div>
+    <div><div class="trust-title">Free Gift Wrapping</div><div class="trust-sub">Signature Aurum packaging</div></div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M8 18v8M16 14v12M24 10v16" stroke="#B8964E" stroke-width="1.5" stroke-linecap="round"/><path d="M3 6l9 6 7-4 10 5" stroke="#B8964E" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+    <div><div class="trust-title">Free Returns</div><div class="trust-sub">14-day hassle-free returns</div></div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section" id="collections">
+  <div class="section-header">
+    <div class="section-title"><small>Shop by Category</small>Browse our Collections</div>
+    <a href="#" class="section-link">View all categories</a>
+  </div>
+  <div class="categories-grid" id="categories-grid"></div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="section" id="new" style="padding-top:0;background:var(--white)">
+  <div class="section-header">
+    <div class="section-title"><small>Latest Arrivals</small>New Season Pieces</div>
+    <a href="#" class="section-link" onclick="clearFilter(event)">See all</a>
+  </div>
+  <div class="filter-bar" id="filter-bar">
+    <button class="filter-btn active" onclick="filterProducts('All',this)">All</button>
+    <button class="filter-btn" onclick="filterProducts('Fragrance',this)">Fragrance</button>
+    <button class="filter-btn" onclick="filterProducts('Timepieces',this)">Timepieces</button>
+    <button class="filter-btn" onclick="filterProducts('Leather Goods',this)">Leather Goods</button>
+    <button class="filter-btn" onclick="filterProducts('Jewellery',this)">Jewellery</button>
+    <button class="filter-btn" onclick="filterProducts('Accessories',this)">Accessories</button>
+  </div>
+  <div class="products-grid" id="products-grid"></div>
+</section>
+
+<!-- BANNER -->
+<section class="banner" id="editorial">
+  <div style="position:relative;z-index:2">
+    <div class="banner-eyebrow">The Aurum Edit</div>
+    <h2>Crafted for those<br>who know the<br>difference</h2>
+    <p>Discover our curated selection of rare and limited pieces — each one sourced directly from the world's finest ateliers, authenticated and guaranteed.</p>
+    <button class="btn-primary" onclick="document.getElementById('new').scrollIntoView({behavior:'smooth'})">Explore the Edit</button>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:center;position:relative;z-index:2">
+    <svg width="320" height="360" viewBox="0 0 320 360">
+      <defs><linearGradient id="bng" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#3A2D1E"/><stop offset="100%" style="stop-color:#1A1208"/></linearGradient></defs>
+      <rect x="40" y="20" width="240" height="320" rx="6" fill="url(#bng)" stroke="rgba(200,164,90,0.15)" stroke-width="1"/>
+      <circle cx="160" cy="95" r="44" fill="none" stroke="#C8A45A" stroke-width="1.5"/>
+      <circle cx="160" cy="95" r="38" fill="#110E0A"/>
+      <text x="160" y="90" text-anchor="middle" fill="#C8A45A" font-family="serif" font-size="8" letter-spacing="2">AURUM</text>
+      <line x1="160" y1="95" x2="160" y2="68" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="160" y1="95" x2="175" y2="95" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="160" cy="95" r="2" fill="#C8A45A"/>
+      <rect x="80" y="175" width="80" height="60" rx="4" fill="#5A3820"/>
+      <path d="M80 200 Q120 188 160 200 L160 175 L80 175 Z" fill="#4A2E18"/>
+      <path d="M95 175 Q95 158 120 158 Q145 158 145 175" fill="none" stroke="#C8A45A" stroke-width="2.5" stroke-linecap="round"/>
+      <rect x="108" y="193" width="24" height="14" rx="3" fill="#C8A45A"/>
+      <rect x="172" y="165" width="48" height="78" rx="5" fill="rgba(200,164,90,0.5)"/>
+      <rect x="178" y="173" width="36" height="62" rx="3" fill="rgba(255,248,210,0.1)"/>
+      <rect x="184" y="148" width="24" height="22" rx="2" fill="rgba(200,164,90,0.4)"/>
+      <rect x="181" y="142" width="30" height="10" rx="2" fill="#C8A45A" opacity="0.7"/>
+      <line x1="60" y1="300" x2="260" y2="300" stroke="rgba(200,164,90,0.2)" stroke-width="0.5"/>
+      <text x="160" y="320" text-anchor="middle" fill="rgba(200,164,90,0.4)" font-family="serif" font-size="9" letter-spacing="4">AURUM COLLECTION</text>
+    </svg>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="about">
+  <div class="section-header" style="margin-bottom:0">
+    <div class="section-title"><small>Client Stories</small>What They Say</div>
+  </div>
+  <div class="testimonials-grid">
+    <div class="test-card"><p class="test-text">The craftsmanship of every piece from Aurum is simply extraordinary. My bag arrived authenticated and more beautiful than imagined.</p><div class="test-author"><div class="test-avatar">SR</div><div><div class="test-name">Sophia Rajan</div><div class="test-loc">Dubai, UAE</div></div></div></div>
+    <div class="test-card"><p class="test-text">I've been searching for a trusted source for rare timepieces for years. Aurum has curated exactly what I needed — authentic and flawlessly delivered.</p><div class="test-author"><div class="test-avatar">MK</div><div><div class="test-name">Marcus Klein</div><div class="test-loc">Geneva, Switzerland</div></div></div></div>
+    <div class="test-card"><p class="test-text">Gifting from Aurum is a statement. The packaging alone is a ceremony. The ring I purchased was utterly flawless. A client for life.</p><div class="test-author"><div class="test-avatar">AL</div><div><div class="test-name">Antoine Lefèvre</div><div class="test-loc">Paris, France</div></div></div></div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <h2>Join the Inner Circle</h2>
+  <p>Receive early access to new collections, exclusive invitations, and our private editorial journal.</p>
+  <div class="nl-form">
+    <input type="email" placeholder="Your email address"/>
+    <button onclick="showToast('Welcome to the Inner Circle ✦')">Subscribe</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="footer-brand-logo">AUR<span>U</span>M</a>
+      <p>Purveyors of rare and exceptional luxury goods. Each piece authenticated, curated, and delivered with uncompromising care.</p>
+      <div style="display:flex;gap:12px;margin-top:24px">
+        <div class="footer-badge">SSL Secured</div>
+        <div class="footer-badge">Verified Seller</div>
+        <div class="footer-badge">ISO Certified</div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Collections</h4>
+      <ul><li><a href="#">Fragrance</a></li><li><a href="#">Timepieces</a></li><li><a href="#">Leather Goods</a></li><li><a href="#">Fine Jewellery</a></li><li><a href="#">Accessories</a></li></ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul><li><a href="#">Authentication</a></li><li><a href="#">Private Shopping</a></li><li><a href="#">Gift Wrapping</a></li><li><a href="#">Global Delivery</a></li><li><a href="#">Returns</a></li></ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul><li><a href="#about">Our Story</a></li><li><a href="#">Sustainability</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li><li><a href="admin.html">Admin Login</a></li></ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Aurum Luxury. All rights reserved.</p>
+    <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookie Policy</a></div>
+  </div>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-header">
+    <div><h3>Your Selections</h3><div class="cart-header-sub" id="cart-item-count">0 items</div></div>
+    <button class="cart-close-btn" onclick="closeCart()">&times;</button>
+  </div>
+  <div class="cart-items" id="cart-items-container">
+    <div class="empty-cart" id="empty-cart">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <p>Your cart is empty</p><span>Add something beautiful</span>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-sub"><span>Subtotal</span><strong id="cart-total">$0</strong></div>
+    <p class="cart-note">Complimentary shipping · Certified authentic<br>Free returns within 14 days</p>
+    <button class="btn-primary" style="width:100%;padding:16px;text-align:center;display:block" onclick="openBilling()">Proceed to Checkout →</button>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="product-modal" onclick="handleModalClick(event)">
+  <div class="modal" id="modal-inner">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div class="modal-body">
+      <div class="modal-gallery" id="modal-gallery"></div>
+      <div class="modal-content" id="modal-content-area"></div>
+    </div>
+    <div class="related-section">
+      <div class="related-title">You May Also Like</div>
+      <div class="related-scroll" id="related-scroll"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     BILLING / CHECKOUT MODAL
+     ═══════════════════════════════════════════════════════ -->
+<div class="billing-overlay" id="billing-overlay" onclick="handleBillingOverlayClick(event)">
+  <div class="billing-modal" id="billing-modal">
+
+    <!-- Header -->
+    <div class="billing-header">
+      <div class="billing-header-left">
+        <div class="billing-logo">AUR<span>U</span>M</div>
+        <h2>Secure Checkout</h2>
+      </div>
+      <button class="billing-close" onclick="closeBilling()">&times;</button>
+    </div>
+
+    <!-- Steps -->
+    <div class="billing-steps" id="billing-steps-bar">
+      <div class="billing-step active" id="bstep-1">
+        <div class="step-num">1</div>
+        <span>Contact</span>
+      </div>
+      <div class="step-divider"></div>
+      <div class="billing-step" id="bstep-2">
+        <div class="step-num">2</div>
+        <span>Shipping</span>
+      </div>
+      <div class="step-divider"></div>
+      <div class="billing-step" id="bstep-3">
+        <div class="step-num">3</div>
+        <span>Payment</span>
+      </div>
+      <div class="step-divider"></div>
+      <div class="billing-step" id="bstep-4">
+        <div class="step-num">4</div>
+        <span>Review</span>
+      </div>
+    </div>
+
+    <!-- Body: Form + Summary -->
+    <div class="billing-body" id="billing-body">
+
+      <!-- Left: Form Area -->
+      <div class="billing-form-area" id="billing-form-area">
+
+        <!-- STEP 1: Contact -->
+        <div class="billing-step-panel active" id="panel-1">
+          <div class="billing-section-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            Contact Information
+          </div>
+          <div class="form-row">
+            <div class="form-group" id="fg-firstname">
+              <label>First Name</label>
+              <input type="text" id="f-firstname" placeholder="Isabelle" autocomplete="given-name">
+              <span class="field-error">Please enter your first name</span>
+            </div>
+            <div class="form-group" id="fg-lastname">
+              <label>Last Name</label>
+              <input type="text" id="f-lastname" placeholder="Laurent" autocomplete="family-name">
+              <span class="field-error">Please enter your last name</span>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group" id="fg-email">
+              <label>Email Address</label>
+              <input type="email" id="f-email" placeholder="isabelle@example.com" autocomplete="email">
+              <span class="field-error">Please enter a valid email</span>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group" id="fg-phone">
+              <label>Phone Number</label>
+              <input type="tel" id="f-phone" placeholder="+1 (555) 000-0000" autocomplete="tel">
+              <span class="field-error">Please enter your phone number</span>
+            </div>
+          </div>
+          <div class="form-row single" style="margin-top:4px">
+            <div class="form-group">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink-soft)">
+                <input type="checkbox" id="f-newsletter" style="width:14px;height:14px;accent-color:var(--gold)">
+                Subscribe to the Aurum Inner Circle for exclusive offers
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Shipping -->
+        <div class="billing-step-panel" id="panel-2">
+          <div class="billing-section-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            Shipping Address
+          </div>
+          <div class="form-row single">
+            <div class="form-group" id="fg-address1">
+              <label>Address Line 1</label>
+              <input type="text" id="f-address1" placeholder="14 Rue de la Paix" autocomplete="address-line1">
+              <span class="field-error">Please enter your address</span>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label>Address Line 2 <span style="color:var(--ink-soft);font-weight:300">(Optional)</span></label>
+              <input type="text" id="f-address2" placeholder="Apartment, suite, etc." autocomplete="address-line2">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" id="fg-city">
+              <label>City</label>
+              <input type="text" id="f-city" placeholder="Paris" autocomplete="address-level2">
+              <span class="field-error">Please enter your city</span>
+            </div>
+            <div class="form-group" id="fg-state">
+              <label>State / Province</label>
+              <input type="text" id="f-state" placeholder="Île-de-France" autocomplete="address-level1">
+              <span class="field-error">Please enter your state</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" id="fg-zip">
+              <label>Postal Code</label>
+              <input type="text" id="f-zip" placeholder="75001" autocomplete="postal-code">
+              <span class="field-error">Please enter a valid postal code</span>
+            </div>
+            <div class="form-group" id="fg-country">
+              <label>Country</label>
+              <div class="select-wrap">
+                <select id="f-country" autocomplete="country">
+                  <option value="">Select country…</option>
+                  <option>United States</option><option>United Kingdom</option><option>France</option>
+                  <option>Germany</option><option>Italy</option><option>Switzerland</option>
+                  <option>United Arab Emirates</option><option>Japan</option><option>Singapore</option>
+                  <option>Australia</option><option>Canada</option><option>Other</option>
+                </select>
+              </div>
+              <span class="field-error">Please select your country</span>
+            </div>
+          </div>
+          <div style="margin-top:8px">
+            <div class="billing-section-title" style="margin-top:28px">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12l5 5L20 7"/></svg>
+              Delivery Method
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <label style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid var(--gold);cursor:pointer;background:rgba(184,150,78,0.04)">
+                <span style="display:flex;align-items:center;gap:10px">
+                  <input type="radio" name="delivery" value="standard" checked style="accent-color:var(--gold)">
+                  <span>
+                    <span style="display:block;font-size:13px;font-weight:500;color:var(--ink)">Standard Delivery</span>
+                    <span style="font-size:12px;color:var(--ink-soft)">5–7 business days · Signature required</span>
+                  </span>
+                </span>
+                <span style="font-size:14px;font-weight:500;color:var(--gold)">Free</span>
+              </label>
+              <label style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid var(--border-soft);cursor:pointer">
+                <span style="display:flex;align-items:center;gap:10px">
+                  <input type="radio" name="delivery" value="express" style="accent-color:var(--gold)">
+                  <span>
+                    <span style="display:block;font-size:13px;font-weight:500;color:var(--ink)">Express Delivery</span>
+                    <span style="font-size:12px;color:var(--ink-soft)">2–3 business days · Fully insured</span>
+                  </span>
+                </span>
+                <span style="font-size:14px;font-weight:500;color:var(--ink)">$28</span>
+              </label>
+              <label style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid var(--border-soft);cursor:pointer">
+                <span style="display:flex;align-items:center;gap:10px">
+                  <input type="radio" name="delivery" value="overnight" style="accent-color:var(--gold)">
+                  <span>
+                    <span style="display:block;font-size:13px;font-weight:500;color:var(--ink)">White Glove Overnight</span>
+                    <span style="font-size:12px;color:var(--ink-soft)">Next business day · Personal delivery</span>
+                  </span>
+                </span>
+                <span style="font-size:14px;font-weight:500;color:var(--ink)">$95</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Payment -->
+        <div class="billing-step-panel" id="panel-3">
+          <div class="billing-section-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+            Payment Details
+          </div>
+          <div class="payment-tabs">
+            <button class="pay-tab active" onclick="switchPayTab(this,'card')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+              Credit Card
+            </button>
+            <button class="pay-tab" onclick="switchPayTab(this,'paypal')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.5 7H8.5a5.5 5.5 0 0 0 0 11H10l1 5h3l2-16z"/></svg>
+              PayPal
+            </button>
+            <button class="pay-tab" onclick="switchPayTab(this,'wire')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M12 5v14M2 12h20"/></svg>
+              Wire Transfer
+            </button>
+          </div>
+
+          <!-- Card Panel -->
+          <div id="pay-card" class="pay-panel">
+            <div class="form-row single">
+              <div class="form-group" id="fg-cardname">
+                <label>Name on Card</label>
+                <input type="text" id="f-cardname" placeholder="ISABELLE LAURENT" autocomplete="cc-name">
+                <span class="field-error">Please enter the name on your card</span>
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group" id="fg-cardnum">
+                <label>Card Number</label>
+                <div class="card-input-wrap">
+                  <input type="text" id="f-cardnum" placeholder="•••• •••• •••• ••••" maxlength="19" autocomplete="cc-number" oninput="formatCardNumber(this)">
+                  <div class="card-brand-icon" id="card-icons">
+                    <span id="icon-visa">VISA</span>
+                    <span id="icon-mc">MC</span>
+                    <span id="icon-amex">AMEX</span>
+                  </div>
+                </div>
+                <span class="field-error">Please enter a valid card number</span>
+              </div>
+            </div>
+            <div class="form-row thirds">
+              <div class="form-group" id="fg-expiry" style="grid-column:span 2">
+                <label>Expiry Date</label>
+                <input type="text" id="f-expiry" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp" oninput="formatExpiry(this)">
+                <span class="field-error">Please enter a valid expiry</span>
+              </div>
+              <div class="form-group" id="fg-cvv">
+                <label>CVV / CVC</label>
+                <input type="text" id="f-cvv" placeholder="•••" maxlength="4" autocomplete="cc-csc" oninput="this.value=this.value.replace(/\D/g,'')">
+                <span class="field-error">Invalid CVV</span>
+              </div>
+            </div>
+            <div class="form-row single" style="margin-top:4px">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--ink-soft)">
+                <input type="checkbox" id="f-savecard" style="width:14px;height:14px;accent-color:var(--gold)" checked>
+                Save card for future purchases (encrypted & secure)
+              </label>
+            </div>
+          </div>
+
+          <!-- PayPal Panel -->
+          <div id="pay-paypal" class="pay-panel" style="display:none">
+            <div style="text-align:center;padding:36px 20px;border:1px solid var(--border-soft)">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ink);margin-bottom:10px">Continue with PayPal</div>
+              <p style="font-size:13px;color:var(--ink-soft);margin-bottom:24px;line-height:1.6">You'll be securely redirected to PayPal to complete your payment after reviewing your order.</p>
+              <div style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:#FFC439;color:#003087;font-weight:500;font-size:14px;letter-spacing:0.02em">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#003087"><path d="M17.5 7H8.5a5.5 5.5 0 0 0 0 11H10l1 5h3l2-16z"/></svg>
+                PayPal
+              </div>
+            </div>
+          </div>
+
+          <!-- Wire Transfer Panel -->
+          <div id="pay-wire" class="pay-panel" style="display:none">
+            <div style="padding:20px;border:1px solid var(--border-soft);background:var(--cream)">
+              <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:16px">Bank Transfer Details</div>
+              <div style="display:grid;gap:10px;font-size:13px">
+                <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border-soft);padding-bottom:8px"><span style="color:var(--ink-soft)">Bank Name</span><span style="color:var(--ink);font-weight:500">Banque de Luxe SA</span></div>
+                <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border-soft);padding-bottom:8px"><span style="color:var(--ink-soft)">Account Name</span><span style="color:var(--ink);font-weight:500">Aurum Luxury Ltd</span></div>
+                <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border-soft);padding-bottom:8px"><span style="color:var(--ink-soft)">IBAN</span><span style="color:var(--ink);font-weight:500;font-family:monospace">CH56 0483 5012 3456 7800</span></div>
+                <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border-soft);padding-bottom:8px"><span style="color:var(--ink-soft)">SWIFT/BIC</span><span style="color:var(--ink);font-weight:500;font-family:monospace">CRESCHZZ80A</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="color:var(--ink-soft)">Reference</span><span style="color:var(--gold);font-weight:500">AUR-<span id="wire-ref">000000</span></span></div>
+              </div>
+              <p style="font-size:12px;color:var(--ink-soft);margin-top:14px;line-height:1.6">Orders are held for 3 business days pending receipt of wire transfer. Items will be dispatched upon confirmation of cleared funds.</p>
+            </div>
+          </div>
+
+          <div class="secure-badge">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L4 6v6c0 5.5 3.6 10.7 8 12 4.4-1.3 8-6.5 8-12V6L12 2z"/></svg>
+            Your payment is protected by 256-bit SSL encryption. Aurum never stores card details.
+          </div>
+        </div>
+
+        <!-- STEP 4: Review -->
+        <div class="billing-step-panel" id="panel-4">
+          <div class="billing-section-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Review Your Order
+          </div>
+          <div id="review-contact" style="margin-bottom:20px"></div>
+          <div id="review-shipping" style="margin-bottom:20px"></div>
+          <div id="review-payment" style="margin-bottom:20px"></div>
+          <div style="padding:16px;background:var(--gold-pale);border:1px solid var(--border);margin-top:8px">
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:13px;color:var(--ink-soft);line-height:1.6">
+              <input type="checkbox" id="f-terms" style="width:14px;height:14px;accent-color:var(--gold);flex-shrink:0;margin-top:2px">
+              I agree to Aurum's <a href="#" style="color:var(--gold)">Terms of Service</a> and <a href="#" style="color:var(--gold)">Privacy Policy</a>. I confirm all items are for personal use and I am of legal purchasing age.
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Order Summary -->
+      <div class="billing-summary">
+        <div class="summary-title">Order Summary</div>
+        <div class="summary-items" id="billing-summary-items"></div>
+
+        <div>
+          <div class="summary-promo">
+            <input type="text" id="promo-input" placeholder="Promo code">
+            <button onclick="applyPromo()">Apply</button>
+          </div>
+          <div class="promo-applied" id="promo-msg"></div>
+        </div>
+
+        <div class="summary-divider"></div>
+        <div class="summary-line"><span>Subtotal</span><span id="s-subtotal">$0</span></div>
+        <div class="summary-line"><span>Delivery</span><span id="s-delivery">Free</span></div>
+        <div class="summary-line" id="s-discount-row" style="display:none;color:var(--gold)"><span>Discount</span><span id="s-discount">−$0</span></div>
+        <div class="summary-line" id="s-tax-row"><span>Est. Tax (8%)</span><span id="s-tax">$0</span></div>
+        <div class="summary-divider"></div>
+        <div class="summary-line total"><span>Total</span><span id="s-total">$0</span></div>
+
+        <div class="summary-guarantee">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L4 6v6c0 5.5 3.6 10.7 8 12 4.4-1.3 8-6.5 8-12V6L12 2z"/></svg>
+          <span>Every Aurum purchase is covered by our 14-day return guarantee and lifetime authentication certificate.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Billing Footer Nav -->
+    <div class="billing-footer" id="billing-footer-nav">
+      <button class="billing-back" id="billing-back-btn" onclick="billingBack()" style="visibility:hidden">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="billing-next" id="billing-next-btn" onclick="billingNext()">
+        Continue to Shipping
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- Order Confirmation -->
+    <div class="order-confirm" id="order-confirm">
+      <div class="confirm-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+      </div>
+      <div class="confirm-order-num" id="confirm-order-num">Order #AUR-000000</div>
+      <div class="confirm-title">Order Confirmed</div>
+      <p class="confirm-subtitle">Thank you for your purchase. Your order is being prepared with the utmost care. You will receive a confirmation email shortly.</p>
+      <div class="confirm-details">
+        <div class="confirm-detail-card"><div class="cdc-label">Items</div><div class="cdc-value" id="cdc-items">—</div></div>
+        <div class="confirm-detail-card"><div class="cdc-label">Total Paid</div><div class="cdc-value" id="cdc-total">—</div></div>
+        <div class="confirm-detail-card"><div class="cdc-label">Estimated Delivery</div><div class="cdc-value">5–7 Days</div></div>
+      </div>
+      <div class="confirm-actions">
+        <button class="btn-primary" onclick="closeBilling()">Continue Shopping</button>
+        <button class="btn-ghost" onclick="showToast('Tracking details sent to your email ✦');closeBilling()">Track Order</button>
+      </div>
+    </div>
+
+  </div><!-- /billing-modal -->
+</div><!-- /billing-overlay -->
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span class="toast-icon">✦</span><span id="toast-msg">Added to cart</span></div>
+
+<script>
+// ─── DATA STORE ──────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'aurum_products_v3';
+const CART_KEY    = 'aurum_cart_v2';
+
+const DEFAULT_PRODUCTS = [
+  {id:1,name:'Noir Absolu Eau de Parfum',brand:'Maison Aurum',category:'Fragrance',price:285,oldPrice:null,badge:'New',rating:4.9,reviews:128,image:null,desc:'A bold oriental fragrance anchored in dark oud, black amber, and smoked vetiver. Noir Absolu opens with bergamot and cardamom before settling into its rich, resinous heart — a scent crafted for those who leave an impression.',specs:[['Volume','50 ml'],['Concentration','Eau de Parfum'],['Notes','Oud, Amber, Vetiver'],['Origin','Grasse, France'],['Longevity','10–14 hours']],sizes:null,inStock:true},
+  {id:2,name:'Constance Mini Leather Bag',brand:'Atelier Cuir',category:'Leather Goods',price:1840,oldPrice:null,badge:'Limited',rating:5.0,reviews:54,image:null,desc:'Handcrafted from a single piece of full-grain tan calfskin, the Constance Mini distills a century of leather tradition into a palm-sized icon. Each bag is numbered and comes with a certificate of authenticity.',specs:[['Material','Full-grain calfskin'],['Hardware','18k gold-plated'],['Interior','Suede-lined'],['Dimensions','18 × 14 × 5 cm'],['Origin','Florence, Italy']],sizes:['Cognac','Tan','Noir','Bordeaux'],inStock:true},
+  {id:3,name:'Prestige Chronograph 41mm',brand:'Calibre 1847',category:'Timepieces',price:4720,oldPrice:5900,badge:'Sale',rating:4.7,reviews:92,image:null,desc:'A master chronograph with Swiss-lever escapement, 72-hour power reserve, and sapphire crystal exhibition case back.',specs:[['Movement','In-house Cal. 1847'],['Case','Steel & 18k Gold'],['Diameter','41mm'],['Water Resistance','100m'],['Power Reserve','72 hours']],sizes:null,inStock:true},
+  {id:4,name:'Eternal Solitaire Diamond Ring',brand:'Aurum Fine',category:'Jewellery',price:3200,oldPrice:null,badge:'New',rating:4.8,reviews:67,image:null,desc:'A 1.2ct round brilliant diamond, D/VS1 graded, set in a cathedral setting of 18k white gold.',specs:[['Diamond','1.2ct D/VS1 GIA'],['Metal','18k White Gold'],['Setting','Cathedral Prong'],['Certification','GIA Certificate'],['Ring Sizes','5–10']],sizes:['5','6','7','8','9','10'],inStock:true},
+  {id:5,name:'Solar Aviator Gold Sunglasses',brand:'Visage Doré',category:'Accessories',price:420,oldPrice:null,badge:null,rating:4.6,reviews:38,image:null,desc:'Hand-polished 24k gold-filled frames with polarised gradient lenses offering 100% UV400 protection.',specs:[['Frame','24k Gold-filled'],['Lens','Polarised UV400'],['Hinges','Swiss spring hinges'],['Temples','Italian acetate'],['Includes','Hard case & cloth']],sizes:null,inStock:true},
+  {id:6,name:'Heritage Jacquard Silk Scarf',brand:'Soie d\'Or',category:'Accessories',price:340,oldPrice:400,badge:'Sale',rating:4.9,reviews:115,image:null,desc:'Woven on antique Jacquard looms in Lyon from 100% mulberry silk, this 90×90cm scarf features a hand-rolled hem and a repeat archive print.',specs:[['Material','100% Mulberry Silk'],['Dimensions','90 × 90 cm'],['Finish','Hand-rolled hem'],['Print','Archive Jacquard'],['Edition','Limited — 500 pieces']],sizes:['Ivory','Champagne','Midnight','Blush'],inStock:true}
+];
+
+function getProducts(){
+  try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){const p=JSON.parse(raw);if(p.length)return p;}}catch(e){}
+  saveProducts(DEFAULT_PRODUCTS);return DEFAULT_PRODUCTS;
+}
+function saveProducts(p){localStorage.setItem(STORAGE_KEY,JSON.stringify(p))}
+
+// ─── CART ─────────────────────────────────────────────────────────────────
+function getCart(){try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]')}catch(e){return[]}}
+function saveCart(c){localStorage.setItem(CART_KEY,JSON.stringify(c))}
+
+function addToCart(id){
+  const products=getProducts();const p=products.find(x=>x.id===id);if(!p)return;
+  const cart=getCart();const ex=cart.find(x=>x.id===id);
+  if(ex)ex.qty++;else cart.push({id:p.id,name:p.name,brand:p.brand,price:p.price,image:p.image,qty:1});
+  saveCart(cart);renderCart();showToast(p.name+' added to cart');
+}
+function removeFromCart(id){saveCart(getCart().filter(x=>x.id!==id));renderCart();}
+
+function renderCart(){
+  const cart=getCart();
+  const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  document.getElementById('cart-count').textContent=cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cart-item-count').textContent=cart.length+' item'+(cart.length!==1?'s':'');
+  document.getElementById('cart-total').textContent='$'+total.toLocaleString();
+  const container=document.getElementById('cart-items-container');
+  if(cart.length===0){
+    container.innerHTML='';
+    const emp=document.createElement('div');emp.id='empty-cart';emp.className='empty-cart';
+    emp.innerHTML=`<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><p>Your cart is empty</p><span>Add something beautiful</span>`;
+    container.appendChild(emp);return;
+  }
+  container.innerHTML=cart.map(item=>`
+    <div class="cart-item">
+      <div class="ci-img">${item.image?`<img src="${item.image}" alt="${item.name}">`:`<div class="svg-sm">${getProductSVG(item.id,60,75)}</div>`}</div>
+      <div class="ci-info"><div class="ci-brand">${item.brand}</div><div class="ci-name">${item.name}</div>
+      <div class="ci-price">$${item.price.toLocaleString()} ${item.qty>1?`<span style="font-size:12px;color:var(--ink-soft)">×${item.qty}</span>`:''}</div></div>
+      <button class="ci-remove" onclick="removeFromCart(${item.id})">×</button>
+    </div>`).join('');
+}
+
+// ─── PRODUCT SVGs ─────────────────────────────────────────────────────────
+const CATEGORY_BG={'Fragrance':'#2A2218','Timepieces':'#1C1C1C','Leather Goods':'#1E1510','Jewellery':'#16161C','Accessories':'#1A1A18','default':'#1A1612'};
+
+function getProductSVG(id,w,h){
+  const type=id%6;const s=`width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"`;const cx=w/2,cy=h/2;
+  if(type===1||type===0){return `<svg ${s}><defs><linearGradient id="sg${id}" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#C8A45A;stop-opacity:.7"/><stop offset="100%" style="stop-color:#E8C878;stop-opacity:.9"/></linearGradient></defs><rect x="${cx-w*.22}" y="${h*.36}" width="${w*.44}" height="${h*.52}" rx="4" fill="url(#sg${id})"/><rect x="${cx-w*.16}" y="${h*.2}" width="${w*.32}" height="${h*.18}" rx="3" fill="url(#sg${id})" opacity=".85"/><rect x="${cx-w*.2}" y="${h*.13}" width="${w*.4}" height="${h*.1}" rx="2" fill="#C8A45A"/></svg>`;}
+  else if(type===2){return `<svg ${s}><circle cx="${cx}" cy="${cy}" r="${Math.min(w,h)*.38}" fill="none" stroke="#C8A45A" stroke-width="1.5"/><circle cx="${cx}" cy="${cy}" r="${Math.min(w,h)*.31}" fill="#1A1612"/><line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy-Math.min(w,h)*.22}" stroke="white" stroke-width="1.2" stroke-linecap="round"/><line x1="${cx}" y1="${cy}" x2="${cx+Math.min(w,h)*.15}" y2="${cy}" stroke="white" stroke-width="1" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="1.5" fill="#C8A45A"/></svg>`;}
+  else if(type===3){return `<svg ${s}><defs><linearGradient id="bg${id}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8B5A2B"/><stop offset="100%" style="stop-color:#4A2E18"/></linearGradient></defs><rect x="${w*.18}" y="${h*.45}" width="${w*.64}" height="${h*.42}" rx="4" fill="url(#bg${id})"/><path d="${`M${w*.18} ${h*.56} Q${cx} ${h*.48} ${w*.82} ${h*.56} L${w*.82} ${h*.45} L${w*.18} ${h*.45} Z`}" fill="#7A4E24"/><path d="${`M${w*.3} ${h*.45} Q${w*.3} ${h*.28} ${cx} ${h*.28} Q${w*.7} ${h*.28} ${w*.7} ${h*.45}`}" fill="none" stroke="#C8A45A" stroke-width="2" stroke-linecap="round"/><rect x="${cx-w*.1}" y="${h*.5}" width="${w*.2}" height="${h*.14}" rx="3" fill="#C8A45A"/></svg>`;}
+  else if(type===4){return `<svg ${s}><polygon points="${cx},${h*.28} ${cx-w*.12},${h*.44} ${cx},${h*.56} ${cx+w*.12},${h*.44}" fill="rgba(220,230,255,.5)" stroke="#C8A45A" stroke-width="1.5"/><polygon points="${cx},${h*.28} ${cx-w*.07},${h*.4} ${cx},${h*.44} ${cx+w*.07},${h*.4}" fill="rgba(255,255,255,.6)"/><ellipse cx="${cx}" cy="${h*.65}" rx="${w*.28}" ry="${h*.08}" fill="rgba(200,164,90,.08)"/><path d="M${cx-w*.28} ${h*.6} Q${cx} ${h*.54} ${cx+w*.28} ${h*.6} Q${cx+w*.28} ${h*.68} ${cx} ${h*.72} Q${cx-w*.28} ${h*.68} ${cx-w*.28} ${h*.6} Z" fill="none" stroke="#C8A45A" stroke-width="2.2"/></svg>`;}
+  else{return `<svg ${s}><ellipse cx="${cx-w*.2}" cy="${cy}" rx="${w*.22}" ry="${h*.18}" fill="rgba(20,16,10,.9)" stroke="#C8A45A" stroke-width="1.5"/><ellipse cx="${cx+w*.2}" cy="${cy}" rx="${w*.22}" ry="${h*.18}" fill="rgba(20,16,10,.9)" stroke="#C8A45A" stroke-width="1.5"/><path d="M${cx-w*.02} ${cy-h*.04} Q${cx} ${cy-h*.1} ${cx+w*.02} ${cy-h*.04}" fill="none" stroke="#C8A45A" stroke-width="1.5"/><line x1="${cx+w*.42}" y1="${cy}" x2="${cx+w*.48}" y2="${cy-h*.04}" stroke="#C8A45A" stroke-width="1.5"/><line x1="${cx-w*.42}" y1="${cy}" x2="${cx-w*.48}" y2="${cy-h*.04}" stroke="#C8A45A" stroke-width="1.5"/></svg>`;}
+}
+
+function renderProductCard(p){
+  const badgeHtml=p.badge?`<span class="product-badge ${p.badge==='New'?'badge-new':p.badge==='Sale'?'badge-sale':'badge-ltd'}">${p.badge}</span>`:'';
+  const imgHtml=p.image?`<img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">`:`<div class="svg-placeholder">${getProductSVG(p.id,140,175)}</div>`;
+  return `<div class="product-card" onclick="openModal(${p.id})" data-category="${p.category}">
+    <div class="product-img-wrap${p.image?' img-loaded':''}">
+      ${badgeHtml}${imgHtml}
+      <div class="product-hover"><button onclick="event.stopPropagation();addToCart(${p.id})">+ Add to Cart</button></div>
+    </div>
+    <div class="product-info">
+      <div class="prod-brand">${p.brand}</div>
+      <div class="prod-name">${p.name}</div>
+      <div class="prod-price-row">
+        <span class="price">$${p.price.toLocaleString()}</span>
+        ${p.oldPrice?`<span class="price-old">$${p.oldPrice.toLocaleString()}</span>`:''}
+        <div class="rating"><span class="stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span>${p.rating}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderProducts(list){
+  document.getElementById('products-grid').innerHTML=list.map(renderProductCard).join('');
+  document.getElementById('stat-products').textContent=getProducts().length+'+';
+}
+
+function filterProducts(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const products=getProducts();
+  renderProducts(cat==='All'?products:products.filter(p=>p.category===cat));
+}
+function clearFilter(e){
+  e.preventDefault();
+  document.querySelectorAll('.filter-btn').forEach((b,i)=>{b.classList.toggle('active',i===0)});
+  renderProducts(getProducts());
+}
+
+// ─── CATEGORIES ───────────────────────────────────────────────────────────
+function renderCategories(){
+  const products=getProducts();const cats={};
+  products.forEach(p=>{cats[p.category]=(cats[p.category]||0)+1;});
+  const grid=document.getElementById('categories-grid');
+  grid.innerHTML=Object.entries(cats).slice(0,4).map(([name,count])=>`
+    <div class="cat-card" onclick="filterAndScrollToProducts('${name}')">
+      <div class="cat-bg" style="background:${CATEGORY_BG[name]||CATEGORY_BG.default}">
+        <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;padding:20%">${getCategorySVG(name)}</div>
+      </div>
+      <div class="cat-info"><span class="cat-name">${name}</span><span class="cat-count">${count} product${count!==1?'s':''}</span></div>
+    </div>`).join('');
+}
+
+function getCategorySVG(name){
+  const map={
+    'Fragrance':`<svg width="100" height="150" viewBox="0 0 100 150"><defs><linearGradient id="cs1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#C8A45A;stop-opacity:.7"/><stop offset="100%" style="stop-color:#E8C878;stop-opacity:.9"/></linearGradient></defs><rect x="28" y="54" width="44" height="76" rx="6" fill="url(#cs1)"/><rect x="35" y="62" width="30" height="60" rx="3" fill="rgba(255,240,200,.12)"/><rect x="37" y="32" width="26" height="26" rx="3" fill="url(#cs1)" opacity=".85"/><rect x="31" y="24" width="38" height="12" rx="2" fill="#C8A45A"/><rect x="39" y="87" width="22" height="28" rx="1" fill="rgba(255,255,255,.1)"/><text x="50" y="98" text-anchor="middle" fill="rgba(255,248,210,.9)" font-family="serif" font-size="6" letter-spacing="2">AURUM</text></svg>`,
+    'Timepieces':`<svg width="130" height="150" viewBox="0 0 130 150"><circle cx="65" cy="75" r="50" fill="none" stroke="#C8A45A" stroke-width="1.5"/><circle cx="65" cy="75" r="43" fill="#1A1612"/><circle cx="65" cy="75" r="40" fill="none" stroke="rgba(200,164,90,.25)" stroke-width=".5"/><text x="65" y="70" text-anchor="middle" fill="#C8A45A" font-family="serif" font-size="8" letter-spacing="2">AURUM</text><line x1="65" y1="75" x2="65" y2="46" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="65" y1="75" x2="82" y2="75" stroke="white" stroke-width="1.2" stroke-linecap="round"/><circle cx="65" cy="75" r="2" fill="#C8A45A"/></svg>`,
+    'Leather Goods':`<svg width="130" height="110" viewBox="0 0 130 110"><defs><linearGradient id="cs3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8B5A2B"/><stop offset="100%" style="stop-color:#4A2E18"/></linearGradient></defs><rect x="18" y="42" width="94" height="55" rx="5" fill="url(#cs3)"/><path d="M18 62 Q65 50 112 62 L112 42 L18 42 Z" fill="#6B4020"/><path d="M33 42 Q33 22 65 22 Q97 22 97 42" fill="none" stroke="#C8A45A" stroke-width="2.5" stroke-linecap="round"/><rect x="52" y="54" width="26" height="18" rx="4" fill="#C8A45A"/></svg>`,
+    'Jewellery':`<svg width="130" height="150" viewBox="0 0 130 150"><path d="M35 55 Q65 42 95 55 Q115 75 105 95 L65 115 L25 95 Q15 75 35 55 Z" fill="none" stroke="#C8A45A" stroke-width="1.5"/><polygon points="65,112 52,132 65,155 78,132" fill="rgba(200,164,90,.3)" stroke="#C8A45A" stroke-width="1.5"/><circle cx="65" cy="48" r="5" fill="#C8A45A"/><circle cx="40" cy="58" r="3" fill="#C8A45A"/><circle cx="90" cy="58" r="3" fill="#C8A45A"/></svg>`,
+    'Accessories':`<svg width="130" height="100" viewBox="0 0 130 100"><ellipse cx="42" cy="50" rx="28" ry="22" fill="rgba(20,16,10,.9)" stroke="#C8A45A" stroke-width="1.8"/><ellipse cx="88" cy="50" rx="28" ry="22" fill="rgba(20,16,10,.9)" stroke="#C8A45A" stroke-width="1.8"/><path d="M68 47 Q65 42 62 47" fill="none" stroke="#C8A45A" stroke-width="2"/><line x1="116" y1="50" x2="128" y2="46" stroke="#C8A45A" stroke-width="2"/><line x1="14" y1="50" x2="2" y2="46" stroke="#C8A45A" stroke-width="2"/></svg>`
+  };
+  return map[name]||map['Accessories'];
+}
+
+function filterAndScrollToProducts(cat){
+  const btn=Array.from(document.querySelectorAll('.filter-btn')).find(b=>b.textContent===cat);
+  if(btn)filterProducts(cat,btn);
+  setTimeout(()=>document.getElementById('new').scrollIntoView({behavior:'smooth'}),100);
+}
+
+// ─── PRODUCT MODAL ─────────────────────────────────────────────────────────
+let currentProductId=null;
+function openModal(id){
+  currentProductId=id;
+  const products=getProducts();const p=products.find(x=>x.id===id);if(!p)return;
+  const gallery=document.getElementById('modal-gallery');
+  gallery.innerHTML=p.image?`<img src="${p.image}" alt="${p.name}">`:`<div class="modal-svg">${getProductSVG(p.id,220,280)}</div>`;
+  const content=document.getElementById('modal-content-area');
+  const starsHtml='★'.repeat(Math.floor(p.rating))+'☆'.repeat(5-Math.floor(p.rating));
+  const sizesHtml=p.sizes?`<div class="modal-sizes"><label>${p.category==='Jewellery'?'Ring Size':p.category==='Leather Goods'?'Colour':'Option'}</label><div class="sizes-wrap">${p.sizes.map((s,i)=>`<button class="size-btn${i===0?' active':''}" onclick="this.parentNode.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">${s}</button>`).join('')}</div></div>`:'';
+  const specsHtml=p.specs?`<div class="modal-specs">${p.specs.map(([k,v])=>`<div class="spec-row"><span class="spec-label">${k}</span><span class="spec-val">${v}</span></div>`).join('')}</div>`:'';
+  content.innerHTML=`<div class="modal-brand">${p.brand}</div><div class="modal-name">${p.name}</div>
+    <div class="modal-rating"><span class="stars">${starsHtml}</span><span>${p.rating} (${p.reviews} reviews)</span></div>
+    <div class="modal-price-row"><span class="modal-price">$${p.price.toLocaleString()}</span>${p.oldPrice?`<span class="modal-price-old">$${p.oldPrice.toLocaleString()}</span><span style="font-size:13px;color:#B8964E;margin-left:4px">Save $${(p.oldPrice-p.price).toLocaleString()}</span>`:''}</div>
+    <p class="modal-desc">${p.desc}</p>${specsHtml}${sizesHtml}
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="addToCart(${p.id});closeModal()">Add to Cart — $${p.price.toLocaleString()}</button>
+      <button class="modal-actions btn-wish" title="Save to wishlist" onclick="showToast('Saved to your wishlist')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+    </div>`;
+  const related=products.filter(x=>x.id!==id&&x.category===p.category).concat(products.filter(x=>x.id!==id&&x.category!==p.category)).slice(0,8);
+  document.getElementById('related-scroll').innerHTML=related.map(r=>`
+    <div class="related-item" onclick="openModal(${r.id})">
+      <div class="related-img${r.image?' img-loaded':''}">
+        ${r.image?`<img src="${r.image}" alt="${r.name}">`:`<div class="svg-pl">${getProductSVG(r.id,80,100)}</div>`}
+      </div>
+      <div class="related-item-name">${r.name}</div>
+      <div class="related-item-price">$${r.price.toLocaleString()}</div>
+    </div>`).join('');
+  document.getElementById('product-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('product-modal').classList.remove('open');document.body.style.overflow='';}
+function handleModalClick(e){if(e.target===document.getElementById('product-modal'))closeModal();}
+
+// ─── SEARCH ────────────────────────────────────────────────────────────────
+let searchOpen=false;
+function toggleSearch(){
+  searchOpen=!searchOpen;const bar=document.getElementById('search-bar');
+  if(searchOpen){bar.classList.add('open');document.getElementById('search-input').focus();}
+  else{bar.classList.remove('open');renderProducts(getProducts());}
+}
+function handleSearch(q){
+  if(!q){renderProducts(getProducts());return;}
+  const filtered=getProducts().filter(p=>p.name.toLowerCase().includes(q.toLowerCase())||p.brand.toLowerCase().includes(q.toLowerCase())||p.category.toLowerCase().includes(q.toLowerCase()));
+  renderProducts(filtered);document.getElementById('new').scrollIntoView({behavior:'smooth'});
+}
+
+// ─── CART UI ───────────────────────────────────────────────────────────────
+function openCart(){
+  document.getElementById('cart-overlay').classList.add('open');
+  document.getElementById('cart-panel').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCart(){
+  document.getElementById('cart-overlay').classList.remove('open');
+  document.getElementById('cart-panel').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ─── TOAST ─────────────────────────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ══════════════════════════════════════════════════════════════
+// BILLING FEATURE
+// ══════════════════════════════════════════════════════════════
+
+let billingStep = 1;
+const TOTAL_STEPS = 4;
+let promoDiscount = 0;
+
+const stepLabels = ['','Continue to Shipping','Continue to Payment','Review Order','Place Order'];
+
+function openBilling(){
+  const cart = getCart();
+  if(cart.length === 0){showToast('Your cart is empty');return;}
+  closeCart();
+  billingStep = 1;
+  promoDiscount = 0;
+  document.getElementById('promo-msg').classList.remove('show');
+  document.getElementById('promo-input').value = '';
+  document.getElementById('s-discount-row').style.display = 'none';
+  // Reset form area / confirmation
+  document.getElementById('billing-body').style.display = 'grid';
+  document.getElementById('billing-steps-bar').style.display = 'flex';
+  document.getElementById('billing-footer-nav').style.display = 'flex';
+  document.getElementById('order-confirm').classList.remove('active');
+  // Generate wire ref
+  document.getElementById('wire-ref').textContent = Math.floor(100000 + Math.random() * 900000);
+  updateBillingStepUI();
+  renderBillingSummary();
+  document.getElementById('billing-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBilling(){
+  document.getElementById('billing-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleBillingOverlayClick(e){
+  if(e.target === document.getElementById('billing-overlay')) closeBilling();
+}
+
+function updateBillingStepUI(){
+  // Panels
+  for(let i=1;i<=TOTAL_STEPS;i++){
+    document.getElementById('panel-'+i).classList.toggle('active', i===billingStep);
+  }
+  // Step indicators
+  for(let i=1;i<=TOTAL_STEPS;i++){
+    const s = document.getElementById('bstep-'+i);
+    s.classList.remove('active','done');
+    if(i < billingStep) s.classList.add('done');
+    else if(i === billingStep) s.classList.add('active');
+    const num = s.querySelector('.step-num');
+    num.textContent = i < billingStep ? '✓' : i;
+  }
+  // Back button
+  const backBtn = document.getElementById('billing-back-btn');
+  backBtn.style.visibility = billingStep > 1 ? 'visible' : 'hidden';
+  // Next button
+  const nextBtn = document.getElementById('billing-next-btn');
+  nextBtn.innerHTML = billingStep < TOTAL_STEPS
+    ? `${stepLabels[billingStep]} <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`
+    : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L4 6v6c0 5.5 3.6 10.7 8 12 4.4-1.3 8-6.5 8-12V6L12 2z"/></svg> Place Order — ${document.getElementById('s-total').textContent}`;
+  // Update review on step 4
+  if(billingStep === 4) populateReview();
+}
+
+function billingNext(){
+  // Validate current step
+  if(!validateBillingStep(billingStep)) return;
+  if(billingStep < TOTAL_STEPS){
+    billingStep++;
+    updateBillingStepUI();
+    document.getElementById('billing-form-area').scrollTop = 0;
+  } else {
+    placeBillingOrder();
+  }
+}
+
+function billingBack(){
+  if(billingStep > 1){billingStep--;updateBillingStepUI();document.getElementById('billing-form-area').scrollTop=0;}
+}
+
+// ─── VALIDATION ───────────────────────────────────────────────────────────
+function setFieldError(groupId, hasError){
+  const fg = document.getElementById(groupId);
+  if(!fg) return;
+  fg.classList.toggle('has-error', hasError);
+}
+
+function validateBillingStep(step){
+  let valid = true;
+  if(step === 1){
+    const fn = document.getElementById('f-firstname').value.trim();
+    const ln = document.getElementById('f-lastname').value.trim();
+    const em = document.getElementById('f-email').value.trim();
+    const ph = document.getElementById('f-phone').value.trim();
+    setFieldError('fg-firstname', !fn); if(!fn) valid=false;
+    setFieldError('fg-lastname', !ln); if(!ln) valid=false;
+    setFieldError('fg-email', !em||!em.includes('@')); if(!em||!em.includes('@')) valid=false;
+    setFieldError('fg-phone', !ph); if(!ph) valid=false;
+  } else if(step === 2){
+    const a1 = document.getElementById('f-address1').value.trim();
+    const ci = document.getElementById('f-city').value.trim();
+    const st = document.getElementById('f-state').value.trim();
+    const zp = document.getElementById('f-zip').value.trim();
+    const co = document.getElementById('f-country').value;
+    setFieldError('fg-address1', !a1); if(!a1) valid=false;
+    setFieldError('fg-city', !ci); if(!ci) valid=false;
+    setFieldError('fg-state', !st); if(!st) valid=false;
+    setFieldError('fg-zip', !zp); if(!zp) valid=false;
+    setFieldError('fg-country', !co); if(!co) valid=false;
+  } else if(step === 3){
+    const activeTab = document.querySelector('.pay-tab.active');
+    if(activeTab && activeTab.dataset.paytype === 'card'){
+      const cn = document.getElementById('f-cardname').value.trim();
+      const num = document.getElementById('f-cardnum').value.replace(/\s/g,'');
+      const exp = document.getElementById('f-expiry').value.trim();
+      const cvv = document.getElementById('f-cvv').value.trim();
+      setFieldError('fg-cardname', !cn); if(!cn) valid=false;
+      setFieldError('fg-cardnum', num.length < 15); if(num.length < 15) valid=false;
+      setFieldError('fg-expiry', exp.length < 5); if(exp.length < 5) valid=false;
+      setFieldError('fg-cvv', cvv.length < 3); if(cvv.length < 3) valid=false;
+    }
+  } else if(step === 4){
+    const terms = document.getElementById('f-terms').checked;
+    if(!terms){showToast('Please accept the Terms of Service to continue');valid=false;}
+  }
+  if(!valid) showToast('Please complete all required fields');
+  return valid;
+}
+
+// ─── PAYMENT TABS ─────────────────────────────────────────────────────────
+function switchPayTab(btn, type){
+  document.querySelectorAll('.pay-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  btn.dataset.paytype = type;
+  document.querySelectorAll('.pay-panel').forEach(p=>p.style.display='none');
+  document.getElementById('pay-'+type).style.display='block';
+}
+// Init card tab default
+document.querySelector('.pay-tab[onclick*="card"]').dataset.paytype = 'card';
+
+// ─── CARD FORMATTING ──────────────────────────────────────────────────────
+function formatCardNumber(input){
+  let v = input.value.replace(/\D/g,'').substring(0,16);
+  input.value = v.replace(/(.{4})/g,'$1 ').trim();
+  // Detect brand
+  const visa = document.getElementById('icon-visa');
+  const mc = document.getElementById('icon-mc');
+  const amex = document.getElementById('icon-amex');
+  [visa,mc,amex].forEach(el=>el.classList.remove('active'));
+  if(v.startsWith('4')) visa.classList.add('active');
+  else if(/^5[1-5]/.test(v)||/^2[2-7]/.test(v)) mc.classList.add('active');
+  else if(/^3[47]/.test(v)) amex.classList.add('active');
+}
+
+function formatExpiry(input){
+  let v = input.value.replace(/\D/g,'').substring(0,4);
+  if(v.length>=2) v = v.substring(0,2)+' / '+v.substring(2);
+  input.value = v;
+}
+
+// ─── PROMO CODE ───────────────────────────────────────────────────────────
+const PROMO_CODES = {'AURUM10':10,'LUXURY20':20,'VIP15':15,'WELCOME5':5};
+function applyPromo(){
+  const code = document.getElementById('promo-input').value.trim().toUpperCase();
+  const discount = PROMO_CODES[code];
+  const msg = document.getElementById('promo-msg');
+  if(discount){
+    promoDiscount = discount;
+    msg.textContent = `✦ Code "${code}" applied — ${discount}% off`;
+    msg.style.color = 'var(--gold)';
+    msg.classList.add('show');
+    document.getElementById('s-discount-row').style.display = 'flex';
+    renderBillingSummary();
+    showToast(`Promo code applied — ${discount}% discount!`);
+  } else {
+    promoDiscount = 0;
+    msg.textContent = 'Invalid promo code';
+    msg.style.color = '#C84040';
+    msg.classList.add('show');
+    document.getElementById('s-discount-row').style.display = 'none';
+    renderBillingSummary();
+  }
+}
+
+// ─── BILLING SUMMARY ──────────────────────────────────────────────────────
+function renderBillingSummary(){
+  const cart = getCart();
+  const itemsHtml = cart.map(item=>`
+    <div class="summary-item">
+      <div class="si-img${item.image?' img-loaded':''}">
+        ${item.image?`<img src="${item.image}" alt="${item.name}">`:`<div class="svg-tiny">${getProductSVG(item.id,40,50)}</div>`}
+      </div>
+      <div class="si-info">
+        <div class="si-name">${item.name}</div>
+        <div class="si-brand">${item.brand}</div>
+        <div class="si-qty">Qty: ${item.qty}</div>
+      </div>
+      <div class="si-price">$${(item.price * item.qty).toLocaleString()}</div>
+    </div>`).join('');
+  document.getElementById('billing-summary-items').innerHTML = itemsHtml || '<p style="font-size:13px;color:var(--ink-soft);padding:12px 0">Cart is empty</p>';
+
+  const subtotal = cart.reduce((s,i)=>s+i.price*i.qty, 0);
+  const deliveryMethod = document.querySelector('input[name="delivery"]:checked');
+  const deliveryCost = deliveryMethod ? (deliveryMethod.value==='express'?28:deliveryMethod.value==='overnight'?95:0) : 0;
+  const discountAmt = Math.round(subtotal * promoDiscount / 100);
+  const taxable = subtotal - discountAmt + deliveryCost;
+  const tax = Math.round(taxable * 0.08);
+  const total = taxable + tax;
+
+  document.getElementById('s-subtotal').textContent = '$'+subtotal.toLocaleString();
+  document.getElementById('s-delivery').textContent = deliveryCost ? '$'+deliveryCost : 'Free';
+  document.getElementById('s-discount').textContent = '−$'+discountAmt.toLocaleString();
+  document.getElementById('s-tax').textContent = '$'+tax.toLocaleString();
+  document.getElementById('s-total').textContent = '$'+total.toLocaleString();
+
+  // Update place order button price if on step 4
+  if(billingStep === 4){
+    const nb = document.getElementById('billing-next-btn');
+    if(nb.textContent.includes('Place Order')) nb.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L4 6v6c0 5.5 3.6 10.7 8 12 4.4-1.3 8-6.5 8-12V6L12 2z"/></svg> Place Order — $${total.toLocaleString()}`;
+  }
+}
+
+// Keep summary updated when delivery changes
+document.querySelectorAll('input[name="delivery"]').forEach(r=>r.addEventListener('change', renderBillingSummary));
+
+// ─── REVIEW PANEL ─────────────────────────────────────────────────────────
+function reviewBlock(title, icon, lines){
+  return `<div style="background:var(--cream);padding:14px 16px;margin-bottom:0">
+    <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:6px">${icon} ${title}</div>
+    <div style="font-size:13px;color:var(--ink-mid);line-height:1.7">${lines.map(l=>`<div>${l}</div>`).join('')}</div>
+  </div>`;
+}
+
+function populateReview(){
+  const fn=document.getElementById('f-firstname').value;
+  const ln=document.getElementById('f-lastname').value;
+  const em=document.getElementById('f-email').value;
+  const ph=document.getElementById('f-phone').value;
+  document.getElementById('review-contact').innerHTML = reviewBlock('Contact', '✦', [fn+' '+ln, em, ph]);
+
+  const a1=document.getElementById('f-address1').value;
+  const a2=document.getElementById('f-address2').value;
+  const ci=document.getElementById('f-city').value;
+  const st=document.getElementById('f-state').value;
+  const zp=document.getElementById('f-zip').value;
+  const co=document.getElementById('f-country').value;
+  const dm=document.querySelector('input[name="delivery"]:checked');
+  const dmLabel = dm ? (dm.value==='standard'?'Standard Delivery (Free)':dm.value==='express'?'Express Delivery ($28)':'White Glove Overnight ($95)') : '';
+  document.getElementById('review-shipping').innerHTML = reviewBlock('Shipping', '→', [a1+(a2?' '+a2:''), ci+', '+st+' '+zp, co, dmLabel]);
+
+  const activeTab = document.querySelector('.pay-tab.active');
+  const payType = activeTab ? (activeTab.dataset.paytype || 'card') : 'card';
+  let payLines = [];
+  if(payType==='card'){
+    const num=document.getElementById('f-cardnum').value;
+    const name=document.getElementById('f-cardname').value;
+    payLines = [name, 'Card ending in '+num.slice(-4)];
+  } else if(payType==='paypal'){
+    payLines = ['PayPal (redirect at confirmation)'];
+  } else {
+    payLines = ['Wire Transfer — Ref: AUR-'+document.getElementById('wire-ref').textContent];
+  }
+  document.getElementById('review-payment').innerHTML = reviewBlock('Payment', '◈', payLines);
+
+  // Update total on next button
+  renderBillingSummary();
+  setTimeout(()=>{
+    const total=document.getElementById('s-total').textContent;
+    document.getElementById('billing-next-btn').innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L4 6v6c0 5.5 3.6 10.7 8 12 4.4-1.3 8-6.5 8-12V6L12 2z"/></svg> Place Order — ${total}`;
+  },50);
+}
+
+// ─── PLACE ORDER ──────────────────────────────────────────────────────────
+function placeBillingOrder(){
+  const cart = getCart();
+  const orderNum = 'AUR-'+Math.floor(100000+Math.random()*900000);
+  const totalEl = document.getElementById('s-total').textContent;
+  const itemCount = cart.reduce((s,i)=>s+i.qty, 0);
+
+  // Clear cart
+  saveCart([]);
+  renderCart();
+
+  // Show confirmation
+  document.getElementById('billing-body').style.display = 'none';
+  document.getElementById('billing-steps-bar').style.display = 'none';
+  document.getElementById('billing-footer-nav').style.display = 'none';
+  document.getElementById('billing-header').querySelector('h2').textContent = 'Order Placed';
+
+  const confirm = document.getElementById('order-confirm');
+  document.getElementById('confirm-order-num').textContent = 'Order '+orderNum;
+  document.getElementById('cdc-items').textContent = itemCount+' item'+(itemCount!==1?'s':'');
+  document.getElementById('cdc-total').textContent = totalEl;
+  confirm.classList.add('active');
+}
+
+// ─── KEYBOARD ──────────────────────────────────────────────────────────────
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    closeModal();closeCart();
+    if(document.getElementById('billing-overlay').classList.contains('open')) closeBilling();
+    if(searchOpen) toggleSearch();
+  }
+});
+
+// ─── SCROLL NAV ────────────────────────────────────────────────────────────
+window.addEventListener('scroll',()=>{
+  document.getElementById('main-nav').style.boxShadow=window.scrollY>20?'0 2px 20px rgba(26,22,18,0.08)':'none';
+});
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+renderCategories();
+renderProducts(getProducts());
+renderCart();
+</script>
+</body>
+</html>
